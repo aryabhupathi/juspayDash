@@ -19,7 +19,7 @@ import RightSidebar from "./MainLayout/RightSidebar";
 import { createTheme } from "@mui/material/styles";
 const drawerWidth = 240;
 const collapsedWidth = 60;
-export default function MainLayout() {
+export default function Dashboard() {
   const [mode, setMode] = useState("light");
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [leftMobileOpen, setLeftMobileOpen] = useState(false);
@@ -50,11 +50,13 @@ export default function MainLayout() {
         <Box
           component="main"
           sx={{
-            flexGrow: 1,
+            height: "100vh",
+            transition: "all 0.3s ease",
+            width: isMobile
+              ? "100%"
+              : `calc(100% - ${leftDrawerWidth + rightDrawerWidth}px)`,
             display: "flex",
             flexDirection: "column",
-            transition: "all 0.3s ease",
-            width: `calc(100% - ${leftDrawerWidth + rightDrawerWidth}px)`,
           }}
         >
           <AppBar
@@ -105,15 +107,12 @@ export default function MainLayout() {
             </Toolbar>
           </AppBar>
           <Toolbar />
-            <Outlet />
           <Box
             sx={{
               flexGrow: 1,
               overflowY: "auto",
               p: 3,
               background: theme.palette.background.default,
-              display: "flex",
-              flexDirection: "column",
             }}
           >
             <Outlet />

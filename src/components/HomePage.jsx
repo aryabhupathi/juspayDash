@@ -3,39 +3,42 @@ import { ProjectionChart } from "./ProjectionChart";
 import RevenueChart from "./RevenueChart";
 import Tiles from "./Tiles";
 import { SalesChart } from "./SalesChart";
-import OrdersTable from "./OrdersTable";
+import SalesTable from "./SalesTable";
+import MapChart from "./MapChart";
 export default function DashboardSummary() {
   return (
-    <Box sx={{ mt: 4, px: 2, maxWidth: 1400, mx: "auto" }}>
+    <Box sx={{ mt: 4, px: 2, width: "100%" }}>
       <Box
         sx={{
-          display: "flex",
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
           gap: 3,
-          alignItems: "stretch",
-          flexDirection: { xs: "column", md: "row" },
         }}
       >
         <Tiles />
         <ProjectionChart />
       </Box>
       <Box
+        mt={5}
         sx={{
-          display: "flex",
-          alignItems: "stretch",
-          flexDirection: { xs: "column", md: "row" },
+          display: "grid",
+          gridTemplateColumns: "7fr 3fr",
+          gap: 3,
         }}
       >
         <RevenueChart />
-        <SalesChart />
+        <MapChart />
       </Box>
       <Box
+        mt={5}
         sx={{
-          display: "flex",
-          alignItems: "stretch",
-          flexDirection: { xs: "column", md: "row" },
+          display: "grid",
+          gridTemplateColumns: "7fr 3fr",
+          gap: 3,
         }}
       >
-        <OrdersTable />
+        <SalesTable />
+        <SalesChart />
       </Box>
     </Box>
   );

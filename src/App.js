@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
 import OrdersTable from "./components/OrdersTable";
 import HomePage from "./components/HomePage";
-export default function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <Routes>
@@ -14,3 +14,5 @@ export default function App() {
     </BrowserRouter>
   );
 }
+
+export default App;

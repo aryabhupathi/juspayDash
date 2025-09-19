@@ -1,4 +1,4 @@
-import { Card, useTheme } from "@mui/material";
+import { Card, Typography, useTheme, Box } from "@mui/material";
 import {
   LineChart,
   Line,
@@ -7,7 +7,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
 } from "recharts";
 const data = [
   { name: "Jan", current: 7000000, previous: 13000000 },
@@ -28,22 +27,54 @@ const RevenueChart = () => {
   return (
     <Card
       sx={{
-        p: 3,
+        p: 1,
         borderRadius: 3,
         backgroundColor: theme.palette.background.paper,
         boxShadow: "none",
-        minWidth: 500,
+        border:"2px solid teal"
       }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <Typography variant="subtitle" fontWeight={600}>
+          Revenue
+        </Typography>
+        <Box sx={{ display: "flex", gap: 3, fontSize: 14 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                bgcolor: "#111",
+              }}
+            />
+            <Typography variant="subtitle">Current Week <b>$58,211</b></Typography>
+          </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: "50%",
+                bgcolor: "#8bc4f5",
+              }}
+            />
+            <Typography variant="subtitle">Previous Week <b>$68,768</b></Typography>
+          </Box>
+        </Box>
+      </Box>
       <ResponsiveContainer width="100%" height={250}>
-        <LineChart
-          data={processedData}
-          margin={{ top: 5, right: 5, left: 0, bottom: 0 }}
-        >
-          <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
+        <LineChart data={processedData}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
           <XAxis
             dataKey="name"
-            interval={0}
             tick={{ fontSize: 13, fill: theme.palette.text.secondary }}
             axisLine={false}
             tickLine={false}
@@ -65,14 +96,7 @@ const RevenueChart = () => {
               }).format(value)
             }
             labelFormatter={(label) => `Month: ${label}`}
-            wrapperStyle={{ fontSize: 14 }}
             cursor={{ strokeDasharray: "3 3", strokeWidth: 2 }}
-          />
-          <Legend
-            verticalAlign="bottom"
-            align="center"
-            iconType="circle"
-            wrapperStyle={{ fontSize: 14 }}
           />
           <Line
             type="monotone"
@@ -80,8 +104,6 @@ const RevenueChart = () => {
             stroke="#111"
             strokeWidth={3}
             dot={false}
-            legendType="circle"
-            name="Current Solid"
             connectNulls
           />
           <Line
@@ -89,9 +111,8 @@ const RevenueChart = () => {
             dataKey="currentDotted"
             stroke="#111"
             strokeWidth={3}
-            dot={false}
             strokeDasharray="6 4"
-            legendType="none"
+            dot={false}
             connectNulls
           />
           <Line
@@ -100,9 +121,7 @@ const RevenueChart = () => {
             stroke="#8bc4f5"
             strokeWidth={3}
             dot={false}
-            opacity={0.95}
-            name="previous"
-            legendType="circle"
+            opacity={0.9}
           />
         </LineChart>
       </ResponsiveContainer>

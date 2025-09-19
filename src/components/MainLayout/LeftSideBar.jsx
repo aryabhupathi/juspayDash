@@ -13,8 +13,14 @@ import {
   Tab,
   Collapse,
   Divider,
+  Tooltip,
   useTheme,
 } from "@mui/material";
+import {
+  FiberManualRecord,
+  KeyboardArrowRight,
+  KeyboardArrowDown,
+} from "@mui/icons-material";
 import {
   StarOutline,
   FolderOpen,
@@ -26,9 +32,8 @@ import {
   Group,
   Article,
   ChatBubbleOutline,
-  KeyboardArrowLeft,
-  KeyboardArrowRight,
 } from "@mui/icons-material";
+import { useNavigate, useLocation } from "react-router-dom";
 const drawerWidth = 240;
 const collapsedWidth = 60;
 const favorites = {
@@ -70,64 +75,85 @@ const others = [
   { label: "Blog", icon: <Article /> },
   { label: "Social", icon: <ChatBubbleOutline /> },
 ];
-function SidebarList({ items, collapsed, parentKey = "" }) {
+function SidebarList({
+  items,
+  collapsed,
+  parentKey = "",
+  level = 0,
+  isMobile,
+  isFavorites,
+}) {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [openItems, setOpenItems] = useState({});
   const handleToggle = (key) =>
     setOpenItems((prev) => ({ ...prev, [key]: !prev[key] }));
+  const handleClick = (item, key, hasChildren) => {
+    if (hasChildren) {
+      handleToggle(key);
+    } else if (item.path) {
+      navigate(item.path);
+    }
+  };
   return (
-    <List dense disablePadding>
+    <List disablePadding>
       {items.map((item) => {
-        const key = `${parentKey}-${item.label || item}`;
+        if (!item) return null;
+        const key = `${parentKey}-${item.label}`;
         const hasChildren = item?.subItems?.length > 0;
         const isOpen = !!openItems[key];
-        if (!item) return null;
+        const isActive = location.pathname === item.path;
         return (
           <Box key={key}>
             <ListItem disablePadding>
-              <ListItemButton
-                onClick={hasChildren ? () => handleToggle(key) : undefined}
-                sx={{
-                  justifyContent: collapsed ? "center" : "flex-start",
-                  minHeight: 36,
-                  px: collapsed ? 0 : 1,
-                  py: 0.25,
-                  borderRadius: 0,
-                  "&:hover": {
-                    backgroundColor: theme.palette.action.hover,
-                  },
-                }}
+              <Tooltip
+                title={collapsed || isMobile ? item.label : ""}
+                placement="right"
               >
-                {!collapsed && (
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 20,
-                      color: theme.palette.text.secondary,
-                      mr: 0.5,
-                    }}
-                  >
-                    {isOpen ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-                  </ListItemIcon>
-                )}
-                <ListItemIcon
+                <ListItemButton
+                  onClick={() => handleClick(item, key, hasChildren)}
                   sx={{
-                    minWidth: 20,
-                    mr: collapsed ? 0 : 1,
-                    color: theme.palette.text.secondary,
+                    justifyContent:
+                      collapsed || isMobile ? "center" : "flex-start",
+                    minHeight: 36,
+                    pl: collapsed || isMobile ? 0 : 2 + level * 2,
+                    pr: 1,
+                    bgcolor: isActive
+                      ? theme.palette.action.selected
+                      : "transparent",
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
                   }}
                 >
-                  {item.icon}
-                </ListItemIcon>
-                {!collapsed && (
-                  <ListItemText
-                    primary={item.label}
-                    primaryTypographyProps={{
-                      fontSize: 13,
-                      color: theme.palette.text.primary,
+                  <ListItemIcon
+                    sx={{
+                      minWidth: collapsed || isMobile ? 0 : 24,
+                      mr: collapsed || isMobile ? 0 : 1,
+                      justifyContent: "center",
+                      color: theme.palette.text.secondary,
                     }}
-                  />
-                )}
-              </ListItemButton>
+                  >
+                    {isFavorites ? (
+                      <FiberManualRecord sx={{ fontSize: 8 }} />
+                    ) : (
+                      item.icon
+                    )}
+                  </ListItemIcon>
+                  {!collapsed && !isMobile && (
+                    <ListItemText primary={item.label} />
+                  )}
+                  {!collapsed &&
+                    !isMobile &&
+                    hasChildren &&
+                    (isOpen ? (
+                      <KeyboardArrowDown fontSize="small" />
+                    ) : (
+                      <KeyboardArrowRight fontSize="small" />
+                    ))}
+                </ListItemButton>
+              </Tooltip>
             </ListItem>
             {hasChildren && (
               <Collapse in={isOpen} timeout="auto" unmountOnExit>
@@ -135,6 +161,9 @@ function SidebarList({ items, collapsed, parentKey = "" }) {
                   items={item.subItems}
                   collapsed={collapsed}
                   parentKey={key}
+                  level={level + 1}
+                  isMobile={isMobile}
+                  isFavorites={false}
                 />
               </Collapse>
             )}
@@ -158,44 +187,44 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
         "& .MuiDrawer-paper": {
           width: collapsed ? collapsedWidth : drawerWidth,
           boxSizing: "border-box",
-          overflowX: "hidden",
           background: theme.palette.background.paper,
           borderRight: `1px solid ${theme.palette.divider}`,
           transition: "width 0.3s",
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
       <Box
         sx={{
           p: 2,
-          height: "100%",
+          borderBottom: `1px solid ${theme.palette.divider}`,
           display: "flex",
-          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: collapsed ? "center" : "flex-start",
+          flexShrink: 0,
+        }}
+      >
+        <Avatar
+          src="https://randomuser.me/api/portraits/men/7.jpg"
+          sx={{ width: 30, height: 30, mr: collapsed ? 0 : 1 }}
+        />
+        {!collapsed && (
+          <Typography
+            variant="body2"
+            sx={{ fontWeight: 600, color: theme.palette.text.primary }}
+          >
+            ByeWind
+          </Typography>
+        )}
+      </Box>
+      <Box
+        sx={{
+          flexGrow: 1,
           overflowY: "auto",
           userSelect: "none",
         }}
       >
-        <Box
-          sx={{
-            mb: 2,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: collapsed ? "center" : "flex-start",
-          }}
-        >
-          <Avatar
-            src="https://randomuser.me/api/portraits/men/7.jpg"
-            sx={{ width: 36, height: 36, mr: collapsed ? 0 : 1 }}
-          />
-          {!collapsed && (
-            <Typography
-              variant="body2"
-              sx={{ fontWeight: 600, color: theme.palette.text.primary }}
-            >
-              ByeWind
-            </Typography>
-          )}
-        </Box>
         {!collapsed && (
           <Box>
             <Tabs
@@ -210,19 +239,33 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
               <Tab label="Recently" sx={{ fontSize: 13, minHeight: 32 }} />
             </Tabs>
             {favTab === 0 && (
-              <SidebarList items={favorites.favorites} collapsed={collapsed} />
+              <SidebarList
+                items={favorites.favorites}
+                collapsed={collapsed}
+                isMobile={isMobile}
+                isFavorites
+              />
             )}
             {favTab === 1 && (
-              <SidebarList items={favorites.recently} collapsed={collapsed} />
+              <SidebarList
+                items={favorites.recently}
+                collapsed={collapsed}
+                isMobile={isMobile}
+                isFavorites
+              />
             )}
           </Box>
         )}
         {!collapsed && <Divider sx={{ my: 1 }} />}
-        <SidebarList items={dashboards} collapsed={collapsed} />
+        <SidebarList
+          items={dashboards}
+          collapsed={collapsed}
+          isMobile={isMobile}
+        />
         {!collapsed && <Divider sx={{ my: 1 }} />}
-        <SidebarList items={pages} collapsed={collapsed} />
+        <SidebarList items={pages} collapsed={collapsed} isMobile={isMobile} />
         {!collapsed && <Divider sx={{ my: 1 }} />}
-        <SidebarList items={others} collapsed={collapsed} />
+        <SidebarList items={others} collapsed={collapsed} isMobile={isMobile} />
       </Box>
     </Drawer>
   );
