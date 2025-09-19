@@ -1,99 +1,112 @@
-// import { LineChart } from '@mui/x-charts';
-
-// const months = [1,2,3,4,5,6];
-// const currentWeekData = [12, 8, 10, 15, 22, 20];
-// const previousWeekData = [10, 18, 13, 11, 18, 25];
-
-// export function RevenueChart() {
-//   return (
-//     <LineChart
-//       xAxis={[{ data: months, label: 'Month' }]}  // Must match data length
-//       series={[
-//         { label: 'Current Week', data: currentWeekData, color: 'black' },
-//         { label: 'Previous Week', data: previousWeekData, color: '#1976d2' },
-//       ]}
-//       height={320}
-//       showLegend
-//       margin={{ left: 60, right: 20, top: 60, bottom: 40 }}
-//     />
-//   );
-// }
-
-
-import { PieChart } from '@mui/x-charts/PieChart';
-import Box from '@mui/material/Box';
-
-// Pie chart data
-const salesData = [
-  { label: 'Direct', value: 300.56, color: '#232931' },
-  { label: 'Affiliate', value: 135.18, color: '#baf6c3' },
-  { label: 'Sponsored', value: 154.02, color: '#a3bafa' },
-  { label: 'E-mail', value: 48.96, color: '#e8eefc' },
+import { Card, useTheme } from "@mui/material";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+} from "recharts";
+const data = [
+  { name: "Jan", current: 7000000, previous: 13000000 },
+  { name: "Feb", current: 19000000, previous: 17000000 },
+  { name: "Mar", current: 24000000, previous: 21000000 },
+  { name: "Apr", current: 12000000, previous: 16000000 },
+  { name: "May", current: 10000000, previous: 9000000 },
+  { name: "Jun", current: 23000000, previous: 23000000 },
 ];
-
-// Percentage for direct sales (example, could be dynamic)
-const directPercent = ((salesData[0].value / salesData.reduce((acc, cur) => acc + cur.value, 0)) * 100).toFixed(1);
-
-export function RevenueChart() {
+const cutIndex = 3;
+const processedData = data.map((item, index) => ({
+  ...item,
+  currentSolid: index <= cutIndex ? item.current : null,
+  currentDotted: index >= cutIndex ? item.current : null,
+}));
+const RevenueChart = () => {
+  const theme = useTheme();
   return (
-    <Box sx={{ background: "#f8f9fa", width: 300, p: 3, borderRadius: 3 }}>
-      <Box sx={{ fontSize: 20, fontWeight: 600, mb: 2 }}>Total Sales</Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 2 }}>
-        <Box sx={{ position: 'relative', width: 160, height: 160 }}>
-          <PieChart
-            series={[
-              {
-                innerRadius: 70,
-                outerRadius: 80,
-                data: salesData,
-                arcLabel: null, // hide default arc labels
-                highlightScope: { faded: 'global', highlighted: 'item' },
-              },
-            ]}
-            colors={salesData.map(d => d.color)}
-            margin={{ top: 0, bottom: 0, left: 0, right: 0 }}
-            width={160}
-            height={160}
+    <Card
+      sx={{
+        p: 3,
+        borderRadius: 3,
+        backgroundColor: theme.palette.background.paper,
+        boxShadow: "none",
+        minWidth: 500,
+      }}
+    >
+      <ResponsiveContainer width="100%" height={250}>
+        <LineChart
+          data={processedData}
+          margin={{ top: 5, right: 5, left: 0, bottom: 0 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
+          <XAxis
+            dataKey="name"
+            interval={0}
+            tick={{ fontSize: 13, fill: theme.palette.text.secondary }}
+            axisLine={false}
+            tickLine={false}
           />
-          {/* Overlay percentage label centered on donut */}
-          <Box sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: '#232931',
-            color: 'white',
-            borderRadius: 2,
-            px: 2,
-            py: 0.5,
-            fontWeight: 600,
-            fontSize: 18,
-          }}>
-            {directPercent}%
-          </Box>
-        </Box>
-      </Box>
-      {/* Custom Legend */}
-      <Box>
-        {salesData.map((item, idx) => (
-          <Box key={item.label} sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-            <Box
-              sx={{
-                width: 10,
-                height: 10,
-                background: item.color,
-                borderRadius: '50%',
-                mr: 2,
-                border: item.label === "Direct" ? 'none' : '1px solid #bfcce2',
-              }}
-            />
-            <Box sx={{ flexGrow: 1, fontWeight: item.label === "Direct" ? 600 : 500 }}>
-              {item.label}
-            </Box>
-            <Box sx={{ fontWeight: 500 }}>${item.value.toFixed(2)}</Box>
-          </Box>
-        ))}
-      </Box>
-    </Box>
+          <YAxis
+            ticks={[0, 10000000, 20000000, 30000000]}
+            tickFormatter={(value) => `${value / 1000000}M`}
+            tick={{ fontSize: 13, fill: theme.palette.text.secondary }}
+            axisLine={false}
+            tickLine={false}
+            domain={[0, 30000000]}
+          />
+          <Tooltip
+            formatter={(value) =>
+              new Intl.NumberFormat("en", {
+                style: "currency",
+                currency: "USD",
+                maximumFractionDigits: 0,
+              }).format(value)
+            }
+            labelFormatter={(label) => `Month: ${label}`}
+            wrapperStyle={{ fontSize: 14 }}
+            cursor={{ strokeDasharray: "3 3", strokeWidth: 2 }}
+          />
+          <Legend
+            verticalAlign="bottom"
+            align="center"
+            iconType="circle"
+            wrapperStyle={{ fontSize: 14 }}
+          />
+          <Line
+            type="monotone"
+            dataKey="currentSolid"
+            stroke="#111"
+            strokeWidth={3}
+            dot={false}
+            legendType="circle"
+            name="Current Solid"
+            connectNulls
+          />
+          <Line
+            type="monotone"
+            dataKey="currentDotted"
+            stroke="#111"
+            strokeWidth={3}
+            dot={false}
+            strokeDasharray="6 4"
+            legendType="none"
+            connectNulls
+          />
+          <Line
+            type="monotone"
+            dataKey="previous"
+            stroke="#8bc4f5"
+            strokeWidth={3}
+            dot={false}
+            opacity={0.95}
+            name="previous"
+            legendType="circle"
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </Card>
   );
-}
+};
+export default RevenueChart;

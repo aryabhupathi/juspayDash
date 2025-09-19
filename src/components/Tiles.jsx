@@ -1,101 +1,100 @@
-import { Box, Grid, Card, Typography, useTheme } from "@mui/material";
+import { Box, Card, Typography, Grid } from "@mui/material";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
-const metrics = [
+const stats = [
   {
-    label: "Customers",
+    title: "Customers",
     value: "3,781",
-    change: "+11.01%",
-    positive: true,
-    color: "info.light",
+    diff: "+11.01%",
+    icon: <TrendingUpIcon fontSize="small" />,
+    bgcolor: "#05A7F7",
+    color: "#fff",
+    diffColor: "#95ffd6",
   },
   {
-    label: "Orders",
+    title: "Orders",
     value: "1,219",
-    change: "-0.03%",
-    positive: false,
-    color: "",
+    diff: "-0.03%",
+    icon: <TrendingDownIcon fontSize="small" />,
+    bgcolor: "#fff",
+    color: "#222",
+    diffColor: "#FF647C",
   },
   {
-    label: "Revenue",
+    title: "Revenue",
     value: "$695",
-    change: "+15.03%",
-    positive: true,
-    color: "info.light",
+    diff: "+15.03%",
+    icon: <TrendingUpIcon fontSize="small" />,
+    bgcolor: "#f7fafc",
+    color: "#222",
+    diffColor: "#3ED598",
   },
   {
-    label: "Growth",
+    title: "Growth",
     value: "30.1%",
-    change: "+6.08%",
-    positive: true,
-    color: "info.light",
+    diff: "+6.08%",
+    icon: <TrendingUpIcon fontSize="small" />,
+    bgcolor: "#05A7F7",
+    color: "#fff",
+    diffColor: "#95ffd6",
   },
 ];
-export function Tiles() {
-  const theme = useTheme();
+export default function Tiles() {
   return (
-    <Grid container spacing={2}>
-      {metrics.map((item, idx) => (
-        <Grid width={150}
-      key={item.label}
-      sx={{ display: "flex", justifyContent: "center" }}
-    >
-          <Card
-            elevation={0}
-            sx={{
-              p: 2.5,
-              backgroundColor: item.color
-                ? theme.palette.mode === "light"
-                  ? theme.palette.info.light
-                  : theme.palette.background.paper
-                : theme.palette.background.paper,
-              borderRadius: 2,
-              boxShadow:
-                theme.palette.mode === "light"
-                  ? "0px 1px 6px rgba(0,0,0,0.04)"
-                  : "0px 1px 6px rgba(0,0,0,0.24)",
-              height: 113,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
-          >
-            <Typography variant="subtitle2" color="text.secondary">
-              {item.label}
-            </Typography>
-            <Typography variant="h5" sx={{ mt: 1 }}>
-              {item.value}
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", mt: 0.5 }}>
-              <Typography
-                variant="body2"
-                color={item.positive ? "success.main" : "error.main"}
-                sx={{ fontWeight: 500 }}
+    <Box sx={{ mt: 4, px: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          gap: 3,
+          alignItems: "stretch",
+          flexDirection: { xs: "column", md: "row" },
+        }}
+      >
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            width: { xs: "100%", md: "calc(66% - 16px)" },
+            flex: "1 1 0",
+            alignContent: "stretch",
+          }}
+        >
+          {stats.map((stat, idx) => (
+            <Grid item xs={12} sm={6} key={stat.title}>
+              <Card
+                sx={{
+                  borderRadius: 3,
+                  bgcolor: stat.bgcolor,
+                  color: stat.color,
+                  boxShadow: 4,
+                  p: 3,
+                  height: 170,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                }}
               >
-                {item.change}
-              </Typography>
-              {item.positive ? (
-                <TrendingUpIcon
+                <Typography variant="h6">{stat.title}</Typography>
+                <Typography variant="h6" fontWeight={700} mt={1} mb={1}>
+                  {stat.value}
+                </Typography>
+                <Box
                   sx={{
-                    fontSize: 18,
-                    color: "success.main",
-                    ml: 0.5,
+                    display: "flex",
+                    alignItems: "center",
+                    color: stat.diffColor,
                   }}
-                />
-              ) : (
-                <TrendingDownIcon
-                  sx={{
-                    fontSize: 18,
-                    color: "error.main",
-                    ml: 0.5,
-                  }}
-                />
-              )}
-            </Box>
-          </Card>
+                >
+                  <Typography variant="body1" fontWeight={600} mr={0.5}>
+                    {stat.diff}
+                  </Typography>
+                  {stat.icon}
+                </Box>
+              </Card>
+            </Grid>
+          ))}
         </Grid>
-        
-      ))}
-    </Grid>
+      </Box>
+    </Box>
   );
 }

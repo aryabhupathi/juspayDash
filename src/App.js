@@ -1,30 +1,16 @@
-
-// import './App.css';
-// import Dashboard from './components/Dashboard';
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <Dashboard />
-//     </div>
-//   );
-// }
-
-// export default App;
-
-
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./components/Dashboard";
-
-function App() {
+import OrdersTable from "./components/OrdersTable";
+import HomePage from "./components/HomePage";
+export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
-        {/* other routes */}
+        <Route element={<Dashboard />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/projects" element={<OrdersTable />} />
+        </Route>
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
-
-export default App;
