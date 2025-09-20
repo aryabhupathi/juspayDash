@@ -28,13 +28,20 @@ export function ProjectionChart() {
         borderRadius: 3,
         p: 2,
         bgcolor: theme.palette.tilelight.main,
+        background:
+          theme.palette.mode === "dark"
+            ? theme.palette.blacklight.main
+            : theme.palette.tilelight.main,
         boxShadow:
           theme.palette.mode === "light"
             ? "0px 1px 6px rgba(0,0,0,0.04)"
             : "0px 1px 6px rgba(0,0,0,0.24)",
       }}
     >
-      <Typography variant="h6" sx={{ fontWeight: "bold" }} gutterBottom>
+      <Typography
+        sx={{ fontWeight: "bold", fontSize: theme.typography.body2.fontSize }}
+        gutterBottom
+      >
         Projections vs Actuals
       </Typography>
       <Box sx={{ flex: 1, minHeight: 220 }}>

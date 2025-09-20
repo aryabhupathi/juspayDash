@@ -10,13 +10,18 @@ export function SalesChart() {
   const theme = useTheme();
   const processedData = salesData.map((item) => ({
     ...item,
-    color: theme.palette[item.color]?.main || item.color,
+    color:
+      item.color === "#1C1C1C" && theme.palette.mode === "dark"
+        ? "#C6C7F8"
+        : theme.palette[item.color]?.main || item.color,
   }));
   return (
     <Box
       sx={{
-        bgcolor:
-          theme.palette.tilelight?.main || theme.palette.background.paper,
+        background:
+          theme.palette.mode === "dark"
+            ? theme.palette.blacklight.main
+            : theme.palette.tilelight.main,
         p: 3,
         borderRadius: 3,
         boxShadow:
@@ -46,17 +51,17 @@ export function SalesChart() {
             series={[
               {
                 valueKey: "value",
-                innerRadius: 40,
-                outerRadius: 70,
+                innerRadius: 50,
+                outerRadius: 80,
                 cornerRadius: 8,
                 paddingAngle: 1.5,
-                data: salesData,
+                data: processedData,
                 arcLabel: null,
                 highlightScope: { faded: "global", highlighted: "item" },
               },
             ]}
             legend={false}
-            colors={salesData.map((d) => d.color)}
+            colors={processedData.map((d) => d.color)}
             width={180}
             height={180}
             sx={{

@@ -15,6 +15,7 @@ import {
   Divider,
   Tooltip,
   useTheme,
+  IconButton,
 } from "@mui/material";
 import {
   FiberManualRecord,
@@ -35,6 +36,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+import CloseIcon from "@mui/icons-material/Close";
 const drawerWidth = 240;
 const collapsedWidth = 60;
 const favorites = {
@@ -114,9 +116,10 @@ function SidebarList({
                   sx={{
                     justifyContent:
                       collapsed || isMobile ? "center" : "flex-start",
-                    minHeight: 36,
-                    pl: collapsed || isMobile ? 0 : 2 + level * 2,
-                    pr: 1,
+                    minHeight: theme.spacing(4.5),
+                    px:
+                      collapsed || isMobile ? 0 : theme.spacing(2 + level * 2),
+                    pr: theme.spacing(1),
                     bgcolor: isActive
                       ? theme.palette.action.selected
                       : "transparent",
@@ -126,14 +129,22 @@ function SidebarList({
                   <ListItemIcon
                     sx={{
                       minWidth: collapsed || isMobile ? 0 : 24,
-                      mr: collapsed || isMobile ? 0 : 1,
+                      mr: isMobile ? 2 : collapsed || isMobile ? 0 : 1,
+                      ml: isMobile ? 2 : collapsed || isMobile ? 0 : 1,
                       justifyContent: "center",
                       color: theme.palette.text.secondary,
+                      fontSize: "14px",
                     }}
                   >
                     {isFavorites ? (
                       <FiberManualRecord
-                        sx={{ fontSize: 8, color: theme.palette.primary.main }}
+                        sx={{
+                          fontSize: 12,
+                          color:
+                            theme.palette.mode === "dark"
+                              ? theme.palette.blacklight.main
+                              : theme.palette.black.main,
+                        }}
                       />
                     ) : (
                       item.icon
@@ -144,7 +155,8 @@ function SidebarList({
                       primary={item.label}
                       slotProps={{
                         primary: {
-                          fontWeight: 500,
+                          fontWeight: theme.typography.fontWeightMedium,
+                          fontSize: "14px",
                           color: theme.palette.text.primary,
                         },
                       }}
@@ -155,7 +167,8 @@ function SidebarList({
                       primary={item.label}
                       slotProps={{
                         primary: {
-                          fontWeight: 500,
+                          fontWeight: theme.typography.fontWeightMedium,
+                          fontSize: "14px",
                           color: theme.palette.text.primary,
                         },
                       }}
@@ -165,14 +178,20 @@ function SidebarList({
                     !isMobile &&
                     hasChildren &&
                     (isOpen ? (
-                      <KeyboardArrowDown fontSize="small" />
+                      <KeyboardArrowDown
+                        fontSize="small"
+                        sx={{ fontSize: 14 }}
+                      />
                     ) : (
-                      <KeyboardArrowRight fontSize="small" />
+                      <KeyboardArrowRight
+                        fontSize="small"
+                        sx={{ fontSize: 14 }}
+                      />
                     ))}
                 </ListItemButton>
               </Tooltip>
             </ListItem>
-            {hasChildren && (
+            {!collapsed && hasChildren && (
               <Collapse in={isOpen} timeout="auto" unmountOnExit>
                 <SidebarList
                   items={item.subItems}
@@ -192,6 +211,7 @@ function SidebarList({
 }
 export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
   const theme = useTheme();
+  const navigate = useNavigate();
   const [favTab, setFavTab] = useState(0);
   return (
     <Drawer
@@ -200,11 +220,18 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
       onClose={onClose}
       ModalProps={{ keepMounted: true }}
       sx={{
-        width: collapsed ? collapsedWidth : drawerWidth,
+        width: collapsed && !isMobile ? collapsedWidth : drawerWidth,
         "& .MuiDrawer-paper": {
-          width: collapsed ? collapsedWidth : drawerWidth,
+          width: isMobile
+            ? drawerWidth
+            : collapsed
+            ? collapsedWidth
+            : drawerWidth,
           boxSizing: "border-box",
-          background: theme.palette.background.paper,
+          background:
+            theme.palette.mode === "dark"
+              ? theme.palette.background.default
+              : theme.palette.primary.main,
           borderRight: `1px solid ${theme.palette.divider}`,
           transition: "width 0.3s",
           display: "flex",
@@ -228,12 +255,22 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
         />
         {!collapsed && (
           <Typography
-            variant="body2"
+            sx={{
+              fontSize: theme.typography.body2.fontSize,
+            }}
             fontWeight={600}
             color={theme.palette.text.primary}
+            onClick={() => navigate("/")}
           >
             Arya Bhupathi
           </Typography>
+        )}
+        {isMobile && (
+          <Box sx={{ display: "flex", justifyContent: "flex-end", p: 1 }}>
+            <IconButton onClick={onClose}>
+              <CloseIcon sx={{ color: theme.palette.error.main }} />
+            </IconButton>
+          </Box>
         )}
       </Box>
       <Box sx={{ flexGrow: 1, overflowY: "auto", userSelect: "none" }}>
@@ -243,12 +280,44 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
               value={favTab}
               onChange={(_, v) => setFavTab(v)}
               variant="fullWidth"
-              textColor="theme.palette.blacklight.main"
               indicatorColor="primary"
-              sx={{ minHeight: 32 }}
+              sx={{
+                backgroundColor:
+                  theme.palette.mode === "dark"
+                    ? theme.palette.background.default
+                    : theme.palette.primary.main,
+              }}
             >
-              <Tab label="Favorites" sx={{ fontSize: 13, minHeight: 32 }} />
-              <Tab label="Recently" sx={{ fontSize: 13, minHeight: 32 }} />
+              <Tab
+                label="Overview"
+                sx={{
+                  color:
+                    theme.palette.mode === "dark"
+                      ? theme.palette.text.primary
+                      : theme.palette.common.black,
+                  "&.Mui-selected": {
+                    color:
+                      theme.palette.mode === "dark"
+                        ? theme.palette.common.white
+                        : theme.palette.common.black,
+                  },
+                }}
+              />
+              <Tab
+                label="Projects"
+                sx={{
+                  color:
+                    theme.palette.mode === "dark"
+                      ? theme.palette.text.primary
+                      : theme.palette.common.black,
+                  "&.Mui-selected": {
+                    color:
+                      theme.palette.mode === "dark"
+                        ? theme.palette.common.white
+                        : theme.palette.common.black,
+                  },
+                }}
+              />
             </Tabs>
             {favTab === 0 && (
               <SidebarList
@@ -269,14 +338,23 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
           </Box>
         )}
         {!collapsed && <Divider sx={{ my: 1 }} />}
+        {!collapsed && !isMobile && (
+          <Typography variant="body2" ml={2}>
+            Dashboards
+          </Typography>
+        )}
         <SidebarList
           items={dashboards}
           collapsed={collapsed}
           isMobile={isMobile}
         />
         {!collapsed && <Divider sx={{ my: 1 }} />}
+        {!collapsed && !isMobile && (
+          <Typography variant="body2" ml={2}>
+            Pages
+          </Typography>
+        )}
         <SidebarList items={pages} collapsed={collapsed} isMobile={isMobile} />
-        {!collapsed && <Divider sx={{ my: 1 }} />}
         <SidebarList items={others} collapsed={collapsed} isMobile={isMobile} />
       </Box>
     </Drawer>

@@ -20,11 +20,23 @@ const stats = (theme) => [
     value: "1,219",
     diff: "-0.03%",
     diffColor: theme.palette.error.main,
-    bgcolor: theme.palette.tilelight.main,
-    color: theme.palette.text.primary,
+    bgcolor:
+      theme.palette.mode === "dark"
+        ? theme.palette.blacklight.main
+        : theme.palette.tilelight.main,
+    color:
+      theme.palette.mode === "dark"
+        ? theme.palette.common.white
+        : theme.palette.common.black,
     icon: (
       <TrendingDownIcon
-        sx={{ color: theme.palette.common.black, fontSize: "medium" }}
+        sx={{
+          color:
+            theme.palette.mode === "dark"
+              ? theme.palette.common.white
+              : theme.palette.common.black,
+          fontSize: "medium",
+        }}
       />
     ),
   },
@@ -33,11 +45,23 @@ const stats = (theme) => [
     value: "$695",
     diff: "+15.03%",
     diffColor: theme.palette.success.main,
-    bgcolor: theme.palette.tilelight.main,
-    color: theme.palette.text.primary,
+    bgcolor:
+      theme.palette.mode === "dark"
+        ? theme.palette.blacklight.main
+        : theme.palette.tilelight.main,
+    color:
+      theme.palette.mode === "dark"
+        ? theme.palette.common.white
+        : theme.palette.common.black,
     icon: (
       <TrendingUpIcon
-        sx={{ color: theme.palette.common.black, fontSize: "medium" }}
+        sx={{
+          color:
+            theme.palette.mode === "dark"
+              ? theme.palette.common.white
+              : theme.palette.common.black,
+          fontSize: "medium",
+        }}
       />
     ),
   },
@@ -61,7 +85,7 @@ export default function Tiles() {
     <Box
       sx={{
         display: "grid",
-        gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+        gridTemplateColumns: { xs: "1fr 1fr", md: "1fr 1fr" },
         gap: 3,
       }}
     >
@@ -69,38 +93,69 @@ export default function Tiles() {
         <Card
           key={index}
           sx={{
-            p: 3,
+            p: 2,
             borderRadius: 3,
-            boxShadow: 1,
             bgcolor: stat.bgcolor,
             color: stat.color,
             justifyContent: "center",
           }}
         >
-          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+          <Typography
+            variant="subtitle1"
+            sx={{
+              fontSize: theme.typography.body2.fontSize,
+              fontWeight: "bold",
+              color:
+                stat.title === "Orders" || stat.title === "Revenue"
+                  ? theme.palette.mode === "dark"
+                    ? theme.palette.common.white
+                    : theme.palette.common.black
+                  : theme.palette.common.black,
+            }}
+          >
             {stat.title}
           </Typography>
-          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography
+            variant="body2"
+            sx={{
+              fontSize: theme.typography.h4.fontSize,
+              fontWeight: "bold",
+              color:
+                stat.title === "Orders" || stat.title === "Revenue"
+                  ? theme.palette.mode === "dark"
+                    ? theme.palette.common.white
+                    : theme.palette.common.black
+                  : theme.palette.common.black,
+            }}
+            mt={1}
+            mb={1}
+          >
+            {stat.value}
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              color: stat.diffColor,
+            }}
+          >
             <Typography
-              variant="body2"
-              sx={{ fontWeight: "bold" }}
-              mt={1}
-              mb={1}
-            >
-              {stat.value}
-            </Typography>
-            <Box
+              variant="caption"
+              fontWeight={600}
+              mr={0.5}
               sx={{
-                display: "flex",
-                alignItems: "center",
-                color: stat.diffColor,
+                fontSize: theme.typography.caption.fontSize,
+                color:
+                  stat.title === "Orders" || stat.title === "Revenue"
+                    ? theme.palette.mode === "dark"
+                      ? theme.palette.common.white
+                      : theme.palette.common.black
+                    : theme.palette.common.black,
               }}
             >
-              <Typography variant="caption" fontWeight={600} mr={0.5}>
-                {stat.diff}
-              </Typography>
-              {stat.icon}
-            </Box>
+              {stat.diff}
+            </Typography>
+            {stat.icon}
           </Box>
         </Card>
       ))}

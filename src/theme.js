@@ -21,6 +21,7 @@ const getTheme = (mode = "light") =>
       purple: {
         main: "#E5ECF6",
       },
+      pink: { main: "#C6C7F8" },
       cyan: {
         main: "#A8C5DA",
       },
@@ -52,7 +53,10 @@ const getTheme = (mode = "light") =>
         main: "#FFC555",
       },
       rejected: {
-        main: "#1C1C1C",
+        main: mode === "light" ? "#1C1C1C" : "#4e4e4e",
+      },
+      pie: {
+        main: "#C6C7F8",
       },
       background: {
         default: mode === "light" ? "#f9f9f9" : "#121212",
@@ -61,71 +65,33 @@ const getTheme = (mode = "light") =>
     },
     typography: {
       fontFamily: "'Roboto', sans-serif",
-      h1: {
-        fontSize: "2.5rem", // 40px
-        fontWeight: 700,
-        lineHeight: 1.2,
-      },
-      h2: {
-        fontSize: "2rem", // 32px
-        fontWeight: 700,
-        lineHeight: 1.3,
-      },
-      h3: {
-        fontSize: "1.75rem", // 28px
-        fontWeight: 600,
-        lineHeight: 1.3,
-      },
       h4: {
-        fontSize: "1.5rem", // 24px
-        fontWeight: 600,
-        lineHeight: 1.35,
+        fontSize: "24px",
       },
       h5: {
-        fontSize: "1.25rem", // 20px
-        fontWeight: 600,
-        lineHeight: 1.4,
+        fontSize: "20px",
       },
       h6: {
-        fontSize: "1.125rem", // 18px
-        fontWeight: 600,
-        lineHeight: 1.4,
+        fontSize: "18px",
       },
       subtitle1: {
-        fontSize: "1rem", // 16px
+        fontSize: "16px",
         fontWeight: 500,
-        lineHeight: 1.5,
       },
       subtitle2: {
-        fontSize: "0.875rem", // 14px
-        fontWeight: 500,
-        lineHeight: 1.5,
+        fontSize: "14px",
       },
       body1: {
-        fontSize: "1rem", // 16px
-        lineHeight: 1.6,
-        color: mode === "light" ? "#444" : "#ddd",
+        fontSize: "16px",
+        color: mode === "light" ? "#000" : "#ddd",
       },
       body2: {
-        fontSize: "0.875rem", // 14px
-        lineHeight: 1.6,
-        color: mode === "light" ? "#666" : "#aaa",
+        fontSize: "14px",
+        color: mode === "light" ? "#000" : "#aaa",
       },
       caption: {
-        fontSize: "0.75rem", // 12px
-        lineHeight: 1.4,
+        fontSize: "12px",
         color: mode === "light" ? "#888" : "#bbb",
-      },
-      overline: {
-        fontSize: "0.75rem", // 12px
-        textTransform: "uppercase",
-        letterSpacing: "0.05em",
-        fontWeight: 500,
-      },
-      button: {
-        fontSize: "0.875rem", // 14px
-        fontWeight: 600,
-        textTransform: "capitalize",
       },
     },
     components: {

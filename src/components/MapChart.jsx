@@ -49,22 +49,30 @@ export default function CustomLegend() {
         borderRadius: 3,
         bgcolor:
           theme.palette.tilelight?.main || theme.palette.background.paper,
+        background:
+          theme.palette.mode === "dark"
+            ? theme.palette.blacklight.main
+            : theme.palette.tilelight.main,
         boxShadow:
           theme.palette.mode === "light"
             ? "0px 1px 6px rgba(0,0,0,0.04)"
             : "0px 1px 6px rgba(0,0,0,0.24)",
       }}
     >
+      <Typography
+        sx={{ fontSize: theme.typography.body2.fontSize, fontWeight: "bold" }}
+      >
+        Revenue by Location
+      </Typography>
       <Box
         component="img"
-        src="/map.png"
+        src={theme.palette.mode === "dark" ? "/map1.png" : "/map.png"}
         alt="Map"
         sx={{
           width: "100%",
           height: "auto",
           objectFit: "contain",
           borderRadius: 2,
-          mb: 2,
         }}
       />
       {data.map((item) => (

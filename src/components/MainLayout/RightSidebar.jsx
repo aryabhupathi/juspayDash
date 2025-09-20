@@ -166,7 +166,10 @@ export default function RightSidebar({ isMobile, open, onClose, width }) {
           overflowX: "hidden",
           display: "flex",
           flexDirection: "column",
-          bgcolor: theme.palette.background.paper,
+          background:
+            theme.palette.mode === "dark"
+              ? theme.palette.background.default
+              : theme.palette.primary.main,
           color: theme.palette.text.primary,
         },
       }}

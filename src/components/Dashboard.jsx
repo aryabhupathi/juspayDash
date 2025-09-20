@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import {
   Box,
@@ -14,7 +14,6 @@ import {
   InputAdornment,
 } from "@mui/material";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
 import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
@@ -25,15 +24,25 @@ import getTheme from "../theme";
 import ViewSidebarOutlinedIcon from "@mui/icons-material/ViewSidebarOutlined";
 const drawerWidth = 240;
 const collapsedWidth = 60;
-export default function Dashboard() {
-  const [mode, setMode] = useState("light");
-  const [leftCollapsed, setLeftCollapsed] = useState(false);
+export default function Dashboard({ mode, setMode }) {
   const [leftMobileOpen, setLeftMobileOpen] = useState(false);
-  const [rightOpen, setRightOpen] = useState(true);
   const [rightMobileOpen, setRightMobileOpen] = useState(false);
+  const [leftCollapsed, setLeftCollapsed] = useState(() => {
+    return localStorage.getItem("leftDrawerOpen") === "closed";
+  });
+  const [rightOpen, setRightOpen] = useState(() => {
+    return localStorage.getItem("rightDrawerOpen") === "open";
+  });
+  useEffect(() => {
+    localStorage.setItem("leftDrawerOpen", leftCollapsed ? "closed" : "open");
+  }, [leftCollapsed]);
+  useEffect(() => {
+    localStorage.setItem("rightDrawerOpen", rightOpen ? "open" : "closed");
+  }, [rightOpen]);
   const theme = useMemo(() => getTheme(mode), [mode]);
   const muiTheme = useTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
+  const isTab = useMediaQuery(muiTheme.breakpoints.down("md"));
   const toggleTheme = () =>
     setMode((prev) => (prev === "light" ? "dark" : "light"));
   const leftDrawerWidth = isMobile
@@ -75,6 +84,10 @@ export default function Dashboard() {
                 ? "100%"
                 : `calc(100% - ${leftDrawerWidth + rightDrawerWidth}px)`,
               transition: "all 0.3s ease",
+              backgroundColor:
+                theme.palette.mode === "dark"
+                  ? theme.palette.black.main
+                  : theme.palette.primary.main,
             }}
           >
             <Toolbar>
@@ -88,25 +101,49 @@ export default function Dashboard() {
                 }
                 sx={{ mr: 1 }}
               >
-                <ViewSidebarOutlinedIcon sx={{ transform: "scaleX(-1)" }} />
+                <ViewSidebarOutlinedIcon
+                  fontSize="small"
+                  sx={{ transform: "scaleX(-1)" }}
+                />
               </IconButton>
-              <StarOutlineIcon
-                sx={{ color: theme.palette.blacklight.main, mr: 1 }}
-              />
-              {!isMobile && (
-                <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-                  My Dashboard
-                </Typography>
+              <StarOutlineIcon fontSize="small" sx={{ mr: 1 }} />
+              {!isMobile && !isTab && (
+                <Box sx={{ display: "flex", padding: 2, alignItems: "center" }}>
+                  <Typography variant="body2" noWrap sx={{ flexGrow: 1 }}>
+                    Dashboard
+                  </Typography>
+                  <Typography variant="body2" noWrap sx={{ mx: 1 }}>
+                    /
+                  </Typography>
+                  <Typography variant="body2" noWrap sx={{ flexGrow: 1 }}>
+                    Default
+                  </Typography>
+                </Box>
               )}
               <Box sx={{ flexGrow: 1 }} />
               <TextField
                 size="small"
-                variant="outlined"
                 placeholder="Search..."
                 sx={{
                   mr: 2,
                   width: isMobile ? 120 : 250,
-                  backgroundColor: "#1C1C1C0D",
+                  backgroundColor:
+                    theme.palette.mode === "dark"
+                      ? "rgba(255, 255, 255, 0.08)"
+                      : "#1C1C1C0D",
+                  borderRadius: "25px",
+                  "& .MuiOutlinedInput-root": {
+                    borderRadius: "25px",
+                    "& fieldset": {
+                      border: "none",
+                    },
+                    "&:hover fieldset": {
+                      border: "none",
+                    },
+                    "&.Mui-focused fieldset": {
+                      border: "none",
+                    },
+                  },
                 }}
                 InputProps={{
                   startAdornment: (
@@ -118,18 +155,20 @@ export default function Dashboard() {
               />
               <IconButton color="inherit" onClick={toggleTheme}>
                 {mode === "light" ? (
-                  <WbSunnyOutlinedIcon />
+                  <WbSunnyOutlinedIcon fontSize="small" />
                 ) : (
-                  <Brightness4Icon />
+                  <WbSunnyOutlinedIcon fontSize="small" />
                 )}
               </IconButton>
               <IconButton color="inherit">
                 <ReplayOutlinedIcon
+                  fontSize="small"
                   sx={{ color: theme.palette.text.primary }}
                 />
               </IconButton>
               <IconButton color="inherit">
                 <NotificationsOutlinedIcon
+                  fontSize="small"
                   sx={{ color: theme.palette.text.primary }}
                 />
               </IconButton>
@@ -143,7 +182,10 @@ export default function Dashboard() {
                 }
                 sx={{ ml: 2 }}
               >
-                <ViewSidebarOutlinedIcon sx={{ transform: "scaleX(-1)" }} />
+                <ViewSidebarOutlinedIcon
+                  fontSize="small"
+                  sx={{ transform: "scaleX(-1)" }}
+                />
               </IconButton>
             </Toolbar>
           </AppBar>

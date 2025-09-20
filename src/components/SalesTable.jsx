@@ -10,6 +10,7 @@ import {
   TableRow,
   Paper,
   Card,
+  Tooltip,
 } from "@mui/material";
 function createData(name, price, quantity, amount) {
   return { name, price, quantity, amount };
@@ -29,8 +30,10 @@ export default function SalesTable() {
       sx={{
         p: 2,
         borderRadius: 3,
-        bgcolor:
-          theme.palette.tilelight?.main || theme.palette.background.paper,
+        background:
+          theme.palette.mode === "dark"
+            ? theme.palette.blacklight.main
+            : theme.palette.tilelight.main,
         boxShadow:
           theme.palette.mode === "light"
             ? "0px 1px 6px rgba(0,0,0,0.04)"
@@ -38,8 +41,7 @@ export default function SalesTable() {
       }}
     >
       <Typography
-        variant="h6"
-        fontWeight={600}
+        sx={{ fontSize: theme.typography.body2.fontSize, fontWeight: "bold" }}
         color={theme.palette.text.primary}
         mb={2}
       >
@@ -50,8 +52,10 @@ export default function SalesTable() {
         sx={{
           boxShadow: "none",
           width: "100%",
-          bgcolor:
-            theme.palette.tilelight?.main || theme.palette.background.paper,
+          background:
+            theme.palette.mode === "dark"
+              ? theme.palette.blacklight.main
+              : theme.palette.tilelight.main,
           borderRadius: 2,
         }}
       >
@@ -79,11 +83,11 @@ export default function SalesTable() {
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
-                        fontSize: theme.typography.body2.fontSize,
+                        fontSize: theme.typography.caption.fontSize,
                         width: index === 0 ? "50%" : "16%",
                       }}
                     >
-                      {header}
+                      <Tooltip title={header}>{header}</Tooltip>
                     </TableCell>
                   )
                 )}
@@ -105,11 +109,11 @@ export default function SalesTable() {
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
-                      fontSize: theme.typography.body2.fontSize,
+                      fontSize: theme.typography.caption.fontSize,
                       color: theme.palette.text.primary,
                     }}
                   >
-                    {row.name}
+                    <Tooltip title={row.name}>{row.name}</Tooltip>
                   </TableCell>
                   <TableCell
                     align="left"
@@ -117,14 +121,14 @@ export default function SalesTable() {
                       borderBottom: "none",
                       px: 1,
                       py: 2,
-                      fontSize: theme.typography.body2.fontSize,
+                      fontSize: theme.typography.caption.fontSize,
                       color: theme.palette.text.secondary,
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                     }}
                   >
-                    {row.price}
+                    <Tooltip title={row.price}>{row.price}</Tooltip>
                   </TableCell>
                   <TableCell
                     align="left"
@@ -132,14 +136,14 @@ export default function SalesTable() {
                       borderBottom: "none",
                       px: 1,
                       py: 2,
-                      fontSize: theme.typography.body2.fontSize,
+                      fontSize: theme.typography.caption.fontSize,
                       color: theme.palette.text.secondary,
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                     }}
                   >
-                    {row.quantity}
+                    <Tooltip title={row.quantity}>{row.quantity}</Tooltip>
                   </TableCell>
                   <TableCell
                     align="left"
@@ -147,12 +151,12 @@ export default function SalesTable() {
                       borderBottom: "none",
                       px: 1,
                       py: 2,
-                      fontSize: theme.typography.body2.fontSize,
+                      fontSize: theme.typography.caption.fontSize,
                       color: theme.palette.text.secondary,
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {row.amount}
+                    <Tooltip title={row.amount}>{row.amount}</Tooltip>
                   </TableCell>
                 </TableRow>
               ))}

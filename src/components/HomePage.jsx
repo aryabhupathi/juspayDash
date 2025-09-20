@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 import { ProjectionChart } from "./ProjectionChart";
 import RevenueChart from "./RevenueChart";
 import Tiles from "./Tiles";
@@ -6,8 +6,19 @@ import { SalesChart } from "./SalesChart";
 import SalesTable from "./SalesTable";
 import MapChart from "./MapChart";
 export default function DashboardSummary() {
+  const theme = useTheme();
   return (
-    <Box sx={{ mt: 4, px: 2, width: "100%" }}>
+    <Box sx={{ px: 2, width: "100%" }}>
+      <Typography
+        color={theme.palette.text.primary}
+        sx={{
+          fontSize: theme.typography.body1.fontSize,
+          fontWeight: "bold",
+          mb: 2,
+        }}
+      >
+        eCommerce
+      </Typography>
       <Box
         sx={{
           display: "grid",
@@ -22,7 +33,7 @@ export default function DashboardSummary() {
         mt={5}
         sx={{
           display: "grid",
-          gridTemplateColumns: "7fr 3fr",
+          gridTemplateColumns: { xs: "1fr", md: "7fr 3fr" },
           gap: 3,
         }}
       >
@@ -33,7 +44,7 @@ export default function DashboardSummary() {
         mt={5}
         sx={{
           display: "grid",
-          gridTemplateColumns: "7fr 3fr",
+          gridTemplateColumns: { xs: "1fr", md: "7fr 3fr" },
           gap: 3,
         }}
       >
