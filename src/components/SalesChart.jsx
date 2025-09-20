@@ -1,22 +1,38 @@
-import { PieChart } from "@mui/x-charts/PieChart";
-import Box from "@mui/material/Box";
+import { Box, useTheme, Typography } from "@mui/material";
+import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
 const salesData = [
-  { text: "Direct", value: 300.56, color: "#232931" },
-  { text: "Affiliate", value: 135.18, color: "#baf6c3" },
-  { text: "Sponsored", value: 154.02, color: "#a3bafa" },
-  { text: "E-mail", value: 48.96, color: "#e8eefc" },
+  { text: "Direct", value: 300.56, color: "#1C1C1C" },
+  { text: "Affiliate", value: 135.18, color: "#BAEDBD" },
+  { text: "Sponsored", value: 154.02, color: "#95A4FC" },
+  { text: "E-mail", value: 48.96, color: "#B1E3FF" },
 ];
 export function SalesChart() {
+  const theme = useTheme();
+  const processedData = salesData.map((item) => ({
+    ...item,
+    color: theme.palette[item.color]?.main || item.color,
+  }));
   return (
     <Box
       sx={{
-        background: "#fff",
+        bgcolor:
+          theme.palette.tilelight?.main || theme.palette.background.paper,
         p: 3,
         borderRadius: 3,
-        boxShadow: "0px 2px 6px rgba(0,0,0,0.08)",
+        boxShadow:
+          theme.palette.mode === "light"
+            ? "0px 2px 6px rgba(0,0,0,0.08)"
+            : "0px 2px 6px rgba(0,0,0,0.3)",
       }}
     >
-      <Box sx={{ fontSize: 18, fontWeight: 600, mb: 3 }}>Total Sales</Box>
+      <Typography
+        variant="h6"
+        fontWeight={600}
+        color={theme.palette.text.primary}
+        mb={3}
+      >
+        Total Sales
+      </Typography>
       <Box
         sx={{
           display: "flex",
@@ -29,9 +45,10 @@ export function SalesChart() {
           <PieChart
             series={[
               {
+                valueKey: "value",
                 innerRadius: 40,
                 outerRadius: 70,
-                cornerRadius: 6,
+                cornerRadius: 8,
                 paddingAngle: 1.5,
                 data: salesData,
                 arcLabel: null,
@@ -42,44 +59,62 @@ export function SalesChart() {
             colors={salesData.map((d) => d.color)}
             width={180}
             height={180}
+            sx={{
+              [`& .${pieArcLabelClasses.root}`]: {
+                fill: "white",
+                fontSize: theme.typography.body2.fontSize,
+                fontWeight: 600,
+              },
+            }}
           />
         </Box>
       </Box>
       <Box>
-        {salesData.map((item) => (
-          <Box
-            key={item.text}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              mb: 1.5,
-              fontSize: 14,
-            }}
-          >
+        {processedData.map((item) => {
+          const textColor =
+            item.text === "Direct"
+              ? theme.palette.text.primary
+              : theme.palette.text.secondary;
+          return (
             <Box
+              key={item.text}
               sx={{
-                width: 10,
-                height: 10,
-                background: item.color,
-                borderRadius: "50%",
-                mr: 2,
-                border: item.text === "Direct" ? "none" : "1px solid #bfcce2",
-              }}
-            />
-            <Box
-              sx={{
-                flexGrow: 1,
-                fontWeight: item.text === "Direct" ? 600 : 500,
-                color: item.text === "Direct" ? "#232931" : "rgba(0,0,0,0.7)",
+                display: "flex",
+                alignItems: "center",
+                mb: 1.5,
+                fontSize: theme.typography.body2.fontSize,
               }}
             >
-              {item.text}
+              <Box
+                sx={{
+                  width: 10,
+                  height: 10,
+                  background: item.color,
+                  borderRadius: "50%",
+                  mr: 2,
+                  border:
+                    item.text === "Direct"
+                      ? "none"
+                      : `1px solid ${theme.palette.divider}`,
+                }}
+              />
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  fontWeight: item.text === "Direct" ? 600 : 500,
+                  color: textColor,
+                }}
+              >
+                {item.text}
+              </Box>
+              <Box
+                sx={{ fontWeight: 500, color: theme.palette.text.secondary }}
+              >
+                ${item.value.toFixed(2)}
+              </Box>
             </Box>
-            <Box sx={{ fontWeight: 500, color: "rgba(0,0,0,0.8)" }}>
-              ${item.value.toFixed(2)}
-            </Box>
-          </Box>
-        ))}
+          );
+        })}
       </Box>
     </Box>
   );

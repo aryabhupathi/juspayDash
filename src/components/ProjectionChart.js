@@ -6,70 +6,94 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  Legend,
   CartesianGrid,
 } from "recharts";
 const data = [
-  { name: "Jan", projections: 10, actuals: 16 },
-  { name: "Feb", projections: 15, actuals: 21 },
-  { name: "Mar", projections: 13, actuals: 19 },
-  { name: "Apr", projections: 15, actuals: 21 },
-  { name: "May", projections: 13, actuals: 14 },
-  { name: "Jun", projections: 15, actuals: 18 },
+  { name: "Jan", projections: 18, actuals: 4 },
+  { name: "Feb", projections: 22, actuals: 5 },
+  { name: "Mar", projections: 19, actuals: 4 },
+  { name: "Apr", projections: 23, actuals: 6 },
+  { name: "May", projections: 16, actuals: 3 },
+  { name: "Jun", projections: 21, actuals: 5 },
 ];
 export function ProjectionChart() {
   const theme = useTheme();
   return (
     <Card
-      elevation={0}
+      elevation={3}
       sx={{
         flex: 1,
         display: "flex",
         flexDirection: "column",
         borderRadius: 3,
-        p: 3,
-        background:
-          theme.palette.mode === "light"
-            ? theme.palette.grey[100]
-            : theme.palette.background.paper,
+        p: 2,
+        bgcolor: theme.palette.tilelight.main,
         boxShadow:
           theme.palette.mode === "light"
             ? "0px 1px 6px rgba(0,0,0,0.04)"
             : "0px 1px 6px rgba(0,0,0,0.24)",
       }}
     >
-      <Typography variant="subtitle1" gutterBottom>
+      <Typography variant="h6" sx={{ fontWeight: "bold" }} gutterBottom>
         Projections vs Actuals
       </Typography>
       <Box sx={{ flex: 1, minHeight: 220 }}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+            margin={{ top: 20, left: 0, right: 0, bottom: 5 }}
+            barCategoryGap={0}
           >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis
-              tickCount={6}
-              tickFormatter={(value) => `${value}M`}
-              domain={[0, 30]}
+            <CartesianGrid
+              vertical={false}
+              stroke={
+                theme.palette.mode === "light"
+                  ? theme.palette.grey[300]
+                  : theme.palette.grey[700]
+              }
+              strokeDasharray="3 3"
             />
-            <Tooltip />
-            <Legend />
+            <XAxis
+              dataKey="name"
+              tick={{
+                fill: theme.palette.text.primary,
+                fontSize: theme.typography.body2.fontSize,
+              }}
+              axisLine={{ stroke: theme.palette.divider }}
+              tickLine={false}
+            />
+            <YAxis
+              ticks={[0, 10, 20, 30]}
+              domain={[0, 30]}
+              tickFormatter={(value) => `${value}M`}
+              tick={{
+                fill: theme.palette.text.primary,
+                fontSize: theme.typography.body2.fontSize,
+              }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: theme.palette.background.paper,
+                border: `1px solid ${theme.palette.divider}`,
+                borderRadius: 8,
+                fontSize: theme.typography.body2.fontSize,
+                color: theme.palette.text.primary,
+              }}
+            />
             <Bar
               dataKey="projections"
               stackId="a"
-              fill={theme.palette.primary.main}
+              fill={theme.palette.cyan.main}
               barSize={22}
-              opacity={0.45}
             />
             <Bar
               dataKey="actuals"
               stackId="a"
-              fill={theme.palette.primary.light}
+              fill={theme.palette.purple.main}
               radius={[6, 6, 0, 0]}
               barSize={22}
-              opacity={0.9}
             />
           </BarChart>
         </ResponsiveContainer>

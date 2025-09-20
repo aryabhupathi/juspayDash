@@ -9,12 +9,12 @@ import {
   ResponsiveContainer,
 } from "recharts";
 const data = [
-  { name: "Jan", current: 7000000, previous: 13000000 },
-  { name: "Feb", current: 19000000, previous: 17000000 },
-  { name: "Mar", current: 24000000, previous: 21000000 },
-  { name: "Apr", current: 12000000, previous: 16000000 },
-  { name: "May", current: 10000000, previous: 9000000 },
-  { name: "Jun", current: 23000000, previous: 23000000 },
+  { name: "Jan", current: 15000000, previous: 10000000 },
+  { name: "Feb", current: 11000000, previous: 17000000 },
+  { name: "Mar", current: 11000000, previous: 17000000 },
+  { name: "Apr", current: 16000000, previous: 12000000 },
+  { name: "May", current: 21000000, previous: 16000000 },
+  { name: "Jun", current: 22000000, previous: 26000000 },
 ];
 const cutIndex = 3;
 const processedData = data.map((item, index) => ({
@@ -26,12 +26,16 @@ const RevenueChart = () => {
   const theme = useTheme();
   return (
     <Card
+      elevation={3}
       sx={{
-        p: 1,
+        p: 2,
         borderRadius: 3,
-        backgroundColor: theme.palette.background.paper,
-        boxShadow: "none",
-        border:"2px solid teal"
+        bgcolor:
+          theme.palette.tilelight?.main || theme.palette.background.paper,
+        boxShadow:
+          theme.palette.mode === "light"
+            ? "0px 1px 6px rgba(0,0,0,0.04)"
+            : "0px 1px 6px rgba(0,0,0,0.24)",
       }}
     >
       <Box
@@ -42,7 +46,7 @@ const RevenueChart = () => {
           mb: 2,
         }}
       >
-        <Typography variant="subtitle" fontWeight={600}>
+        <Typography variant="subtitle1" fontWeight={600}>
           Revenue
         </Typography>
         <Box sx={{ display: "flex", gap: 3, fontSize: 14 }}>
@@ -52,10 +56,12 @@ const RevenueChart = () => {
                 width: 10,
                 height: 10,
                 borderRadius: "50%",
-                bgcolor: "#111",
+                bgcolor: theme.palette.text.primary,
               }}
             />
-            <Typography variant="subtitle">Current Week <b>$58,211</b></Typography>
+            <Typography variant="body2">
+              Current Week <b>$58,211</b>
+            </Typography>
           </Box>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Box
@@ -63,26 +69,42 @@ const RevenueChart = () => {
                 width: 10,
                 height: 10,
                 borderRadius: "50%",
-                bgcolor: "#8bc4f5",
+                bgcolor: theme.palette.info.main,
               }}
             />
-            <Typography variant="subtitle">Previous Week <b>$68,768</b></Typography>
+            <Typography variant="body2">
+              Previous Week <b>$68,768</b>
+            </Typography>
           </Box>
         </Box>
       </Box>
       <ResponsiveContainer width="100%" height={250}>
         <LineChart data={processedData}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+          <CartesianGrid
+            vertical={false}
+            stroke={
+              theme.palette.mode === "light"
+                ? theme.palette.grey[300]
+                : theme.palette.grey[700]
+            }
+            strokeDasharray="3 3"
+          />
           <XAxis
             dataKey="name"
-            tick={{ fontSize: 13, fill: theme.palette.text.secondary }}
+            tick={{
+              fontSize: theme.typography.body2.fontSize,
+              fill: theme.palette.text.secondary,
+            }}
             axisLine={false}
             tickLine={false}
           />
           <YAxis
             ticks={[0, 10000000, 20000000, 30000000]}
             tickFormatter={(value) => `${value / 1000000}M`}
-            tick={{ fontSize: 13, fill: theme.palette.text.secondary }}
+            tick={{
+              fontSize: theme.typography.body2.fontSize,
+              fill: theme.palette.text.secondary,
+            }}
             axisLine={false}
             tickLine={false}
             domain={[0, 30000000]}
@@ -99,26 +121,26 @@ const RevenueChart = () => {
             cursor={{ strokeDasharray: "3 3", strokeWidth: 2 }}
           />
           <Line
-            type="monotone"
+            type="natural"
             dataKey="currentSolid"
-            stroke="#111"
+            stroke={theme.palette.blacklight.main}
             strokeWidth={3}
             dot={false}
             connectNulls
           />
           <Line
-            type="monotone"
+            type="natural"
             dataKey="currentDotted"
-            stroke="#111"
+            stroke={theme.palette.blacklight.main}
             strokeWidth={3}
             strokeDasharray="6 4"
             dot={false}
             connectNulls
           />
           <Line
-            type="monotone"
+            type="natural"
             dataKey="previous"
-            stroke="#8bc4f5"
+            stroke={theme.palette.cyan.main}
             strokeWidth={3}
             dot={false}
             opacity={0.9}

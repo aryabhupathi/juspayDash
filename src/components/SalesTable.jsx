@@ -1,13 +1,16 @@
 import { useTheme } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Card,
+} from "@mui/material";
 function createData(name, price, quantity, amount) {
   return { name, price, quantity, amount };
 }
@@ -21,13 +24,35 @@ const rows = [
 export default function SalesTable() {
   const theme = useTheme();
   return (
-    <Box>
-      <Typography>Top Selling Product</Typography>
+    <Card
+      elevation={3}
+      sx={{
+        p: 2,
+        borderRadius: 3,
+        bgcolor:
+          theme.palette.tilelight?.main || theme.palette.background.paper,
+        boxShadow:
+          theme.palette.mode === "light"
+            ? "0px 1px 6px rgba(0,0,0,0.04)"
+            : "0px 1px 6px rgba(0,0,0,0.24)",
+      }}
+    >
+      <Typography
+        variant="h6"
+        fontWeight={600}
+        color={theme.palette.text.primary}
+        mb={2}
+      >
+        Top Selling Product
+      </Typography>
       <TableContainer
         component={Paper}
         sx={{
           boxShadow: "none",
           width: "100%",
+          bgcolor:
+            theme.palette.tilelight?.main || theme.palette.background.paper,
+          borderRadius: 2,
         }}
       >
         <Box sx={{ minWidth: { xs: "100%", sm: "100%", md: "auto" } }}>
@@ -49,12 +74,12 @@ export default function SalesTable() {
                       sx={{
                         borderBottom: `2px solid ${theme.palette.divider}`,
                         fontWeight: 600,
-                        color: theme.palette.text.primary,
+                        color: theme.palette.text.secondary,
                         px: 1,
-                        py: 2.5,
                         whiteSpace: "nowrap",
                         overflow: "hidden",
                         textOverflow: "ellipsis",
+                        fontSize: theme.typography.body2.fontSize,
                         width: index === 0 ? "50%" : "16%",
                       }}
                     >
@@ -66,17 +91,22 @@ export default function SalesTable() {
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <TableRow key={row.name}>
+                <TableRow
+                  key={row.name}
+                  sx={{ "&:last-child td": { borderBottom: 0 } }}
+                >
                   <TableCell
                     component="th"
                     scope="row"
                     sx={{
                       borderBottom: "none",
                       px: 1,
-                      py: 2.5,
+                      py: 2,
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
+                      fontSize: theme.typography.body2.fontSize,
+                      color: theme.palette.text.primary,
                     }}
                   >
                     {row.name}
@@ -86,7 +116,9 @@ export default function SalesTable() {
                     sx={{
                       borderBottom: "none",
                       px: 1,
-                      py: 2.5,
+                      py: 2,
+                      fontSize: theme.typography.body2.fontSize,
+                      color: theme.palette.text.secondary,
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -99,7 +131,9 @@ export default function SalesTable() {
                     sx={{
                       borderBottom: "none",
                       px: 1,
-                      py: 2.5,
+                      py: 2,
+                      fontSize: theme.typography.body2.fontSize,
+                      color: theme.palette.text.secondary,
                       whiteSpace: "nowrap",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
@@ -112,7 +146,9 @@ export default function SalesTable() {
                     sx={{
                       borderBottom: "none",
                       px: 1,
-                      py: 2.5,
+                      py: 2,
+                      fontSize: theme.typography.body2.fontSize,
+                      color: theme.palette.text.secondary,
                       whiteSpace: "nowrap",
                     }}
                   >
@@ -124,6 +160,6 @@ export default function SalesTable() {
           </Table>
         </Box>
       </TableContainer>
-    </Box>
+    </Card>
   );
 }

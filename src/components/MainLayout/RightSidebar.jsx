@@ -1,18 +1,19 @@
+import { useTheme } from "@mui/material";
 import {
   Drawer,
   List,
   ListItem,
-  IconButton,
-  Box,
   Avatar,
+  Box,
   Typography,
   Divider,
-  useTheme,
+  IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import BugReportIcon from "@mui/icons-material/BugReport";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import SensorsIcon from "@mui/icons-material/Sensors";
 const contacts = [
   {
     name: "Natali Craig",
@@ -42,24 +43,25 @@ const contacts = [
 const notifications = [
   {
     icon: <BugReportIcon />,
-    color: "info.light",
+    color: "blue",
     title: "You have a bug that needs...",
     time: "Just now",
   },
   {
     icon: <PersonAddIcon />,
-    color: "success.light",
+    color: "tilelight",
     title: "New user registered",
     time: "59 minutes ago",
   },
   {
     icon: <NotificationsIcon />,
-    color: "warning.light",
+    color: "blue",
     title: "System alert",
     time: "12 hours ago",
   },
   {
-    avatar: contacts[3].avatar,
+    icon: <SensorsIcon />,
+    color: "tilelight",
     title: "Andi Lane subscribed to you",
     time: "Today, 11:59 AM",
   },
@@ -95,7 +97,14 @@ export default function RightSidebar({ isMobile, open, onClose, width }) {
   const theme = useTheme();
   const renderListSection = (title, items) => (
     <>
-      <Typography sx={{ fontWeight: 600, fontSize: 15, mb: 1 }}>
+      <Typography
+        sx={{
+          fontWeight: 600,
+          fontSize: 15,
+          mb: 1,
+          color: theme.palette.text.primary,
+        }}
+      >
         {title}
       </Typography>
       <List sx={{ py: 0, mb: 2 }}>
@@ -108,19 +117,28 @@ export default function RightSidebar({ isMobile, open, onClose, width }) {
             <Avatar
               src={item.avatar || ""}
               sx={{
-                bgcolor: item.color || "transparent",
+                bgcolor: item.color
+                  ? theme.palette[item.color]?.main
+                  : "transparent",
                 mr: 2,
                 width: 32,
                 height: 32,
+                color: item.color
+                  ? theme.palette.black.main
+                  : theme.palette.text.primary,
               }}
             >
               {item.icon}
             </Avatar>
             <Box>
-              <Typography fontSize={13} fontWeight={500}>
+              <Typography
+                fontSize={13}
+                fontWeight={500}
+                color={theme.palette.text.primary}
+              >
                 {item.title}
               </Typography>
-              <Typography fontSize={11} color="text.secondary">
+              <Typography fontSize={11} color={theme.palette.text.secondary}>
                 {item.time}
               </Typography>
             </Box>

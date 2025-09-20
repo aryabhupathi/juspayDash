@@ -29,11 +29,11 @@ import SwapVertIcon from "@mui/icons-material/SwapVert";
 import SearchIcon from "@mui/icons-material/Search";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 const statusColors = {
-  "In Progress": "info",
-  Complete: "success",
-  Pending: "primary",
-  Approved: "warning",
-  Rejected: "error",
+  "In Progress": "progress",
+  Complete: "complete",
+  Pending: "pending",
+  Approved: "approved",
+  Rejected: "rejected",
 };
 const initialRows = [
   {
@@ -121,14 +121,20 @@ export default function OrdersTable() {
     );
   };
   return (
-    <Box p={isSmDown ? 1 : 2} sx={{ width: "100%" }}>
-      <Typography variant={isSmDown ? "h6" : "h5"}>Order List</Typography>
+    <Box p={isSmDown ? 1 : 1} sx={{ width: "100%" }}>
+      <Typography
+        variant={isSmDown ? "h6" : "h5"}
+        color={theme.palette.text.primary}
+      >
+        Order List
+      </Typography>
       <Paper
         variant="outlined"
         sx={{
           borderRadius: 2,
           backgroundColor: theme.palette.background.paper,
           color: theme.palette.text.primary,
+          mt: 2,
         }}
       >
         <Box
@@ -136,15 +142,20 @@ export default function OrdersTable() {
           alignItems="center"
           justifyContent="space-between"
           p={isSmDown ? 1 : 2}
+          sx={{
+            borderRadius: 2,
+            backgroundColor: theme.palette.tilelight.main,
+            color: theme.palette.text.primary,
+          }}
         >
           <Box display="flex" alignItems="center" gap={1}>
-            <IconButton size="small" color="primary">
+            <IconButton size="small" color="theme.palette.blacklight.main">
               <AddIcon />
             </IconButton>
-            <IconButton size="small" color="primary">
+            <IconButton size="small" color="theme.palette.blacklight.main">
               <FilterListIcon />
             </IconButton>
-            <IconButton size="small" color="primary">
+            <IconButton size="small" color="theme.palette.blacklight.main">
               <SwapVertIcon />
             </IconButton>
           </Box>
@@ -154,7 +165,11 @@ export default function OrdersTable() {
             placeholder="Search..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            sx={{ minWidth: isSmDown ? 120 : 200 }}
+            sx={{
+              minWidth: isSmDown ? 120 : 200,
+              backgroundColor: theme.palette.background.default,
+              borderRadius: 1,
+            }}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -183,12 +198,26 @@ export default function OrdersTable() {
                       onChange={handleSelectAll}
                     />
                   </TableCell>
-                  <TableCell>Order ID</TableCell>
-                  <TableCell>User</TableCell>
-                  <TableCell>Project</TableCell>
-                  <TableCell>Address</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Status</TableCell>
+                  {[
+                    "Order ID",
+                    "User",
+                    "Project",
+                    "Address",
+                    "Date",
+                    "Status",
+                  ].map((header) => (
+                    <TableCell
+                      key={header}
+                      sx={{
+                        fontWeight: 600,
+                        color: theme.palette.text.primary,
+                        px: 1,
+                        py: 2.5,
+                      }}
+                    >
+                      {header}
+                    </TableCell>
+                  ))}
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -200,12 +229,22 @@ export default function OrdersTable() {
                         key={row.orderId}
                         hover
                         selected={isItemSelected}
+                        sx={{
+                          "&:hover .row-checkbox": {
+                            visibility: "visible",
+                          },
+                        }}
                       >
-                        <TableCell
-                          padding="checkbox"
-                          onClick={() => handleSelect(row.orderId)}
-                        >
-                          <Checkbox checked={isItemSelected} color="primary" />
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            className="row-checkbox"
+                            checked={isItemSelected}
+                            color="primary"
+                            sx={{
+                              visibility: "hidden",
+                            }}
+                            onChange={() => handleSelect(row.orderId)}
+                          />
                         </TableCell>
                         <TableCell>{row.orderId}</TableCell>
                         <TableCell>
@@ -215,20 +254,19 @@ export default function OrdersTable() {
                               alt={row.user.name}
                               sx={{ width: 30, height: 30 }}
                             />
-                            <Typography noWrap>{row.user.name}</Typography>
+                            <Typography
+                              noWrap
+                              color={theme.palette.text.primary}
+                            >
+                              {row.user.name}
+                            </Typography>
                           </Box>
                         </TableCell>
                         <TableCell>{row.project}</TableCell>
                         <TableCell>{row.address}</TableCell>
                         <TableCell>
                           <Box display="flex" alignItems="center" gap={0.5}>
-                            <span
-                              role="img"
-                              aria-label="calendar"
-                              style={{ fontSize: 16 }}
-                            >
-                              <CalendarTodayOutlinedIcon />
-                            </span>
+                            <CalendarTodayOutlinedIcon fontSize="small" />
                             <Typography>{row.date}</Typography>
                           </Box>
                         </TableCell>
@@ -261,7 +299,7 @@ export default function OrdersTable() {
                   })
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={8} align="center" sx={{ py: 4 }}>
+                    <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
                       No results found
                     </TableCell>
                   </TableRow>
@@ -275,7 +313,11 @@ export default function OrdersTable() {
               paginatedRows.map((row) => {
                 const isItemSelected = selected.includes(row.orderId);
                 return (
-                  <Card key={row.orderId} variant="outlined">
+                  <Card
+                    key={row.orderId}
+                    variant="outlined"
+                    sx={{ backgroundColor: theme.palette.background.paper }}
+                  >
                     <CardContent>
                       <Box
                         display="flex"
@@ -292,38 +334,54 @@ export default function OrdersTable() {
                             alt={row.user.name}
                             sx={{ width: 36, height: 36 }}
                           />
-                          <Typography fontWeight={600}>
+                          <Typography
+                            fontWeight={600}
+                            color={theme.palette.text.primary}
+                          >
                             {row.user.name}
                           </Typography>
                         </Box>
                         {row.status === "Rejected" && (
-                          <IconButton size="small">
+                          <IconButton size="small" color="primary">
                             <MoreHorizIcon />
                           </IconButton>
                         )}
                       </Box>
                       <Box mt={1}>
-                        <Typography variant="body2" noWrap>
+                        <Typography
+                          variant="body2"
+                          noWrap
+                          color={theme.palette.text.secondary}
+                        >
                           Order: {row.orderId}
                         </Typography>
-                        <Typography variant="body2" noWrap>
+                        <Typography
+                          variant="body2"
+                          noWrap
+                          color={theme.palette.text.secondary}
+                        >
                           Project: {row.project}
                         </Typography>
-                        <Typography variant="body2" noWrap>
+                        <Typography
+                          variant="body2"
+                          noWrap
+                          color={theme.palette.text.secondary}
+                        >
                           Address: {row.address}
                         </Typography>
-                        <Typography variant="body2" noWrap>
-                          Date:{" "}
-                          <span role="img" aria-label="calendar">
-                            📅
-                          </span>{" "}
+                        <Typography
+                          variant="body2"
+                          noWrap
+                          color={theme.palette.text.secondary}
+                        >
+                          Date: <CalendarTodayOutlinedIcon fontSize="small" />{" "}
                           {row.date}
                         </Typography>
                         <Chip
                           label={row.status}
                           color={statusColors[row.status]}
                           size="small"
-                          sx={{ mt: 1 }}
+                          sx={{ mt: 1, fontWeight: 500 }}
                         />
                       </Box>
                     </CardContent>
@@ -331,7 +389,11 @@ export default function OrdersTable() {
                 );
               })
             ) : (
-              <Typography align="center" sx={{ py: 4 }}>
+              <Typography
+                align="center"
+                color={theme.palette.text.secondary}
+                sx={{ py: 4 }}
+              >
                 No results found
               </Typography>
             )}

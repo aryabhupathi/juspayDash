@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Outlet } from "react-router-dom";
 import {
   Box,
@@ -10,13 +10,19 @@ import {
   useMediaQuery,
   useTheme,
   ThemeProvider,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
+import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
+import ReplayOutlinedIcon from "@mui/icons-material/ReplayOutlined";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import SearchIcon from "@mui/icons-material/Search";
 import LeftSidebar from "./MainLayout/LeftSideBar";
 import RightSidebar from "./MainLayout/RightSidebar";
-import { createTheme } from "@mui/material/styles";
+import getTheme from "../theme";
+import ViewSidebarOutlinedIcon from "@mui/icons-material/ViewSidebarOutlined";
 const drawerWidth = 240;
 const collapsedWidth = 60;
 export default function Dashboard() {
@@ -25,7 +31,7 @@ export default function Dashboard() {
   const [leftMobileOpen, setLeftMobileOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(true);
   const [rightMobileOpen, setRightMobileOpen] = useState(false);
-  const theme = createTheme({ palette: { mode } });
+  const theme = useMemo(() => getTheme(mode), [mode]);
   const muiTheme = useTheme();
   const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const toggleTheme = () =>
@@ -61,6 +67,7 @@ export default function Dashboard() {
         >
           <AppBar
             position="fixed"
+            color="primary"
             sx={{
               left: isMobile ? 0 : leftDrawerWidth,
               right: isMobile ? 0 : rightDrawerWidth,
@@ -81,16 +88,50 @@ export default function Dashboard() {
                 }
                 sx={{ mr: 1 }}
               >
-                <MenuIcon />
+                <ViewSidebarOutlinedIcon sx={{ transform: "scaleX(-1)" }} />
               </IconButton>
-              {!leftCollapsed && !isMobile && (
+              <StarOutlineIcon
+                sx={{ color: theme.palette.blacklight.main, mr: 1 }}
+              />
+              {!isMobile && (
                 <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
                   My Dashboard
                 </Typography>
               )}
               <Box sx={{ flexGrow: 1 }} />
+              <TextField
+                size="small"
+                variant="outlined"
+                placeholder="Search..."
+                sx={{
+                  mr: 2,
+                  width: isMobile ? 120 : 250,
+                  backgroundColor: "#1C1C1C0D",
+                }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
               <IconButton color="inherit" onClick={toggleTheme}>
-                {mode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
+                {mode === "light" ? (
+                  <WbSunnyOutlinedIcon />
+                ) : (
+                  <Brightness4Icon />
+                )}
+              </IconButton>
+              <IconButton color="inherit">
+                <ReplayOutlinedIcon
+                  sx={{ color: theme.palette.text.primary }}
+                />
+              </IconButton>
+              <IconButton color="inherit">
+                <NotificationsOutlinedIcon
+                  sx={{ color: theme.palette.text.primary }}
+                />
               </IconButton>
               <IconButton
                 color="inherit"
@@ -102,7 +143,7 @@ export default function Dashboard() {
                 }
                 sx={{ ml: 2 }}
               >
-                <MenuIcon />
+                <ViewSidebarOutlinedIcon sx={{ transform: "scaleX(-1)" }} />
               </IconButton>
             </Toolbar>
           </AppBar>
@@ -112,7 +153,7 @@ export default function Dashboard() {
               flexGrow: 1,
               overflowY: "auto",
               p: 3,
-              background: theme.palette.background.default,
+              bgcolor: "background.default",
             }}
           >
             <Outlet />

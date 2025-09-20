@@ -24,22 +24,23 @@ import {
 import {
   StarOutline,
   FolderOpen,
-  Dashboard,
-  School,
-  FolderSpecial,
-  Pageview,
   AccountBox,
-  Group,
-  Article,
   ChatBubbleOutline,
 } from "@mui/icons-material";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import ShoppingBagOutlinedIcon from "@mui/icons-material/ShoppingBagOutlined";
+import PieChartOutlineIcon from "@mui/icons-material/PieChartOutline";
+import FolderOpenOutlinedIcon from "@mui/icons-material/FolderOpenOutlined";
 import { useNavigate, useLocation } from "react-router-dom";
+import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 const drawerWidth = 240;
 const collapsedWidth = 60;
 const favorites = {
   favorites: [
     { label: "Overview", icon: <StarOutline /> },
-    { label: "Projects", icon: <FolderOpen /> },
+    { label: "Projects", icon: <FolderOpen />, path: "/projects" },
   ],
   recently: [
     { label: "Recent 1", icon: <StarOutline /> },
@@ -47,19 +48,19 @@ const favorites = {
   ],
 };
 const dashboards = [
-  { label: "Default", icon: <Dashboard /> },
-  { label: "eCommerce", icon: <School /> },
+  { label: "Default", icon: <PieChartOutlineIcon /> },
+  { label: "eCommerce", icon: <ShoppingBagOutlinedIcon /> },
   {
     label: "Projects",
-    icon: <FolderSpecial />,
+    icon: <FolderOpenOutlinedIcon />,
     subItems: [{ label: "Sub Project 1" }, { label: "Sub Project 2" }],
   },
-  { label: "Online Courses", icon: <Pageview /> },
+  { label: "Online Courses", icon: <MenuBookOutlinedIcon /> },
 ];
 const pages = [
   {
     label: "User Profile",
-    icon: <AccountBox />,
+    icon: <AccountCircleOutlinedIcon />,
     subItems: [
       { label: "Overview" },
       { label: "Projects" },
@@ -71,8 +72,8 @@ const pages = [
 ];
 const others = [
   { label: "Account", icon: <AccountBox /> },
-  { label: "Corporate", icon: <Group /> },
-  { label: "Blog", icon: <Article /> },
+  { label: "Corporate", icon: <GroupsOutlinedIcon /> },
+  { label: "Blog", icon: <ArticleOutlinedIcon /> },
   { label: "Social", icon: <ChatBubbleOutline /> },
 ];
 function SidebarList({
@@ -90,11 +91,8 @@ function SidebarList({
   const handleToggle = (key) =>
     setOpenItems((prev) => ({ ...prev, [key]: !prev[key] }));
   const handleClick = (item, key, hasChildren) => {
-    if (hasChildren) {
-      handleToggle(key);
-    } else if (item.path) {
-      navigate(item.path);
-    }
+    if (hasChildren) handleToggle(key);
+    else if (item.path) navigate(item.path);
   };
   return (
     <List disablePadding>
@@ -106,7 +104,7 @@ function SidebarList({
         const isActive = location.pathname === item.path;
         return (
           <Box key={key}>
-            <ListItem disablePadding>
+            <ListItem disablePadding sx={{ position: "relative" }}>
               <Tooltip
                 title={collapsed || isMobile ? item.label : ""}
                 placement="right"
@@ -122,9 +120,7 @@ function SidebarList({
                     bgcolor: isActive
                       ? theme.palette.action.selected
                       : "transparent",
-                    "&:hover": {
-                      backgroundColor: theme.palette.action.hover,
-                    },
+                    "&:hover": { backgroundColor: theme.palette.action.hover },
                   }}
                 >
                   <ListItemIcon
@@ -136,13 +132,34 @@ function SidebarList({
                     }}
                   >
                     {isFavorites ? (
-                      <FiberManualRecord sx={{ fontSize: 8 }} />
+                      <FiberManualRecord
+                        sx={{ fontSize: 8, color: theme.palette.primary.main }}
+                      />
                     ) : (
                       item.icon
                     )}
                   </ListItemIcon>
                   {!collapsed && !isMobile && (
-                    <ListItemText primary={item.label} />
+                    <ListItemText
+                      primary={item.label}
+                      slotProps={{
+                        primary: {
+                          fontWeight: 500,
+                          color: theme.palette.text.primary,
+                        },
+                      }}
+                    />
+                  )}
+                  {isMobile && (
+                    <ListItemText
+                      primary={item.label}
+                      slotProps={{
+                        primary: {
+                          fontWeight: 500,
+                          color: theme.palette.text.primary,
+                        },
+                      }}
+                    />
                   )}
                   {!collapsed &&
                     !isMobile &&
@@ -212,26 +229,21 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
         {!collapsed && (
           <Typography
             variant="body2"
-            sx={{ fontWeight: 600, color: theme.palette.text.primary }}
+            fontWeight={600}
+            color={theme.palette.text.primary}
           >
-            ByeWind
+            Arya Bhupathi
           </Typography>
         )}
       </Box>
-      <Box
-        sx={{
-          flexGrow: 1,
-          overflowY: "auto",
-          userSelect: "none",
-        }}
-      >
+      <Box sx={{ flexGrow: 1, overflowY: "auto", userSelect: "none" }}>
         {!collapsed && (
           <Box>
             <Tabs
               value={favTab}
               onChange={(_, v) => setFavTab(v)}
               variant="fullWidth"
-              textColor="primary"
+              textColor="theme.palette.blacklight.main"
               indicatorColor="primary"
               sx={{ minHeight: 32 }}
             >
