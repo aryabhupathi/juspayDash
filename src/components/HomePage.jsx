@@ -23,7 +23,7 @@ export default function DashboardSummary() {
         sx={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-          gap: 3,
+          gap: 6,
         }}
       >
         <Tiles />
