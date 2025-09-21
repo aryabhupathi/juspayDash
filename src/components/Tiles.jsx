@@ -1,4 +1,4 @@
-import { Card, Typography, Box, useTheme } from "@mui/material";
+import { Card, Typography, Box, useTheme, ButtonBase } from "@mui/material";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import TrendingDownIcon from "@mui/icons-material/TrendingDown";
 const stats = (theme) => [
@@ -81,6 +81,9 @@ const stats = (theme) => [
 ];
 export default function Tiles() {
   const theme = useTheme();
+  const handleClick = (title) => {
+    console.log(`${title} clicked!`);
+  };
   return (
     <Box
       sx={{
@@ -90,61 +93,48 @@ export default function Tiles() {
       }}
     >
       {stats(theme).map((stat, index) => (
-        <Card
+        <ButtonBase
           key={index}
+          onClick={() => handleClick(stat.title)}
           sx={{
-            p: 2,
             borderRadius: 3,
-            bgcolor: stat.bgcolor,
-            color: stat.color,
-            justifyContent: "center",
+            width: "100%",
+            "&:hover .MuiCard-root": {
+              transform: "scale(1.03)",
+              boxShadow: theme.shadows[10],
+            },
           }}
         >
-          <Typography
-            variant="subtitle1"
+          <Card
             sx={{
-              fontSize: theme.typography.body2.fontSize,
-              fontWeight: "bold",
-              color:
-                stat.title === "Orders" || stat.title === "Revenue"
-                  ? theme.palette.mode === "dark"
-                    ? theme.palette.common.white
-                    : theme.palette.common.black
-                  : theme.palette.common.black,
-            }}
-          >
-            {stat.title}
-          </Typography>
-          <Typography
-            variant="body2"
-            sx={{
-              fontSize: theme.typography.h4.fontSize,
-              fontWeight: "bold",
-              color:
-                stat.title === "Orders" || stat.title === "Revenue"
-                  ? theme.palette.mode === "dark"
-                    ? theme.palette.common.white
-                    : theme.palette.common.black
-                  : theme.palette.common.black,
-            }}
-            mt={1}
-            mb={1}
-          >
-            {stat.value}
-          </Typography>
-          <Box
-            sx={{
+              p: 2,
+              borderRadius: 3,
+              bgcolor: stat.bgcolor,
+              color: stat.color,
+              width: "100%",
+              transition:
+                "transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out",
+              transform: "scale(1)",
+              cursor: "pointer",
+              boxShadow: "none",
               display: "flex",
-              alignItems: "center",
-              color: stat.diffColor,
+              flexDirection: "column",
+              alignItems: {
+                xs: "center",
+                md: "flex-start",
+              },
+              textAlign: {
+                xs: "center",
+                md: "left",
+              },
             }}
           >
             <Typography
-              variant="caption"
-              fontWeight={600}
-              mr={0.5}
+              variant="subtitle1"
               sx={{
-                fontSize: theme.typography.caption.fontSize,
+                fontSize: theme.typography.body2.fontSize,
+                fontWeight: "bold",
+                mb: 1,
                 color:
                   stat.title === "Orders" || stat.title === "Revenue"
                     ? theme.palette.mode === "dark"
@@ -153,11 +143,63 @@ export default function Tiles() {
                     : theme.palette.common.black,
               }}
             >
-              {stat.diff}
+              {stat.title}
             </Typography>
-            {stat.icon}
-          </Box>
-        </Card>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: {
+                  xs: "column",
+                  md: "row",
+                },
+                alignItems: "center",
+                gap: 1,
+                width: "100%",
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: theme.typography.h4.fontSize,
+                  fontWeight: "bold",
+                  color:
+                    stat.title === "Orders" || stat.title === "Revenue"
+                      ? theme.palette.mode === "dark"
+                        ? theme.palette.common.white
+                        : theme.palette.common.black
+                      : theme.palette.common.black,
+                }}
+              >
+                {stat.value}
+              </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  color: stat.diffColor,
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  fontWeight={600}
+                  mr={0.5}
+                  sx={{
+                    fontSize: theme.typography.caption.fontSize,
+                    color:
+                      stat.title === "Orders" || stat.title === "Revenue"
+                        ? theme.palette.mode === "dark"
+                          ? theme.palette.common.white
+                          : theme.palette.common.black
+                        : theme.palette.common.black,
+                  }}
+                >
+                  {stat.diff}
+                </Typography>
+                {stat.icon}
+              </Box>
+            </Box>
+          </Card>
+        </ButtonBase>
       ))}
     </Box>
   );

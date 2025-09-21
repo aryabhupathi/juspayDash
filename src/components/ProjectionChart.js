@@ -27,7 +27,6 @@ export function ProjectionChart() {
         flexDirection: "column",
         borderRadius: 3,
         p: 2,
-        bgcolor: theme.palette.tilelight.main,
         background:
           theme.palette.mode === "dark"
             ? theme.palette.blacklight.main
@@ -89,6 +88,7 @@ export function ProjectionChart() {
                 color: theme.palette.text.primary,
               }}
             />
+      
             <Bar
               dataKey="projections"
               stackId="a"

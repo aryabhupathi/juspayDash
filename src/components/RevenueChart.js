@@ -94,6 +94,18 @@ const RevenueChart = () => {
               </Box>
             </Box>
           )}
+          {isMobile && (
+            <Typography
+              sx={{
+                fontSize: theme.typography.body1.fontSize,
+                fontWeight: 600,
+                textAlign: "left",
+                mb: 1,
+              }}
+            >
+              Revenue
+            </Typography>
+          )}
           <ResponsiveContainer width="100%" height={250}>
             <LineChart data={processedData}>
               <CartesianGrid
@@ -172,14 +184,16 @@ const RevenueChart = () => {
             </LineChart>
           </ResponsiveContainer>
           {isMobile && (
-            <Box sx={{ display: "flex", gap: 3, fontSize: 14, mt: 2 }}>
-              <Typography
-                sx={{ fontSize: theme.typography.body1.fontSize }}
-                mr={2}
-                fontWeight={600}
-              >
-                Revenue
-              </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: 3,
+                fontSize: 14,
+                mt: 2,
+              }}
+            >
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 <Box
                   sx={{

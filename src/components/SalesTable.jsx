@@ -10,7 +10,9 @@ import {
   TableRow,
   Paper,
   Card,
+  CardContent,
   Tooltip,
+  useMediaQuery,
 } from "@mui/material";
 function createData(name, price, quantity, amount) {
   return { name, price, quantity, amount };
@@ -24,6 +26,7 @@ const rows = [
 ];
 export default function SalesTable() {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   return (
     <Card
       elevation={3}
@@ -47,19 +50,78 @@ export default function SalesTable() {
       >
         Top Selling Product
       </Typography>
-      <TableContainer
-        component={Paper}
-        sx={{
-          boxShadow: "none",
-          width: "100%",
-          background:
-            theme.palette.mode === "dark"
-              ? theme.palette.blacklight.main
-              : theme.palette.tilelight.main,
-          borderRadius: 2,
-        }}
-      >
-        <Box sx={{ minWidth: { xs: "100%", sm: "100%", md: "auto" } }}>
+      {isMobile ? (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {rows.map((row) => (
+            <Card
+              key={row.name}
+              sx={{
+                p: 1,
+                borderRadius: 2,
+                background:
+                  theme.palette.mode === "dark"
+                    ? theme.palette.blacklight.main
+                    : theme.palette.tilelight.main,
+                boxShadow:
+                  theme.palette.mode === "light"
+                    ? "0px 1px 6px rgba(0,0,0,0.04)"
+                    : "0px 1px 6px rgba(0,0,0,0.24)",
+              }}
+            >
+              <CardContent sx={{ p: 1 }}>
+                <Tooltip title={row.name}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: "bold",
+                      color: theme.palette.text.primary,
+                    }}
+                  >
+                    Name: {row.name}
+                  </Typography>
+                </Tooltip>
+                <Tooltip title={row.price}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: theme.palette.text.secondary }}
+                  >
+                    Price: {row.price}
+                  </Typography>
+                </Tooltip>
+                <Tooltip title={row.quantity}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: theme.palette.text.secondary }}
+                  >
+                    Quantity: {row.quantity}
+                  </Typography>
+                </Tooltip>
+                <Tooltip title={row.amount}>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: theme.palette.text.secondary }}
+                  >
+                    Amount: {row.amount}
+                  </Typography>
+                </Tooltip>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      ) : (
+        <TableContainer
+          component={Paper}
+          sx={{
+            boxShadow: "none",
+            width: "100%",
+            background:
+              theme.palette.mode === "dark"
+                ? theme.palette.blacklight.main
+                : theme.palette.tilelight.main,
+            borderRadius: 2,
+            overflowX: "auto",
+          }}
+        >
           <Table
             size="small"
             sx={{
@@ -162,8 +224,8 @@ export default function SalesTable() {
               ))}
             </TableBody>
           </Table>
-        </Box>
-      </TableContainer>
+        </TableContainer>
+      )}
     </Card>
   );
 }

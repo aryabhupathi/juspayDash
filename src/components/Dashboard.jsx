@@ -25,6 +25,9 @@ import ViewSidebarOutlinedIcon from "@mui/icons-material/ViewSidebarOutlined";
 const drawerWidth = 240;
 const collapsedWidth = 60;
 export default function Dashboard({ mode, setMode }) {
+  
+  const [lopen, setlOpen] = useState(false);
+  const [ropen, setrOpen] = useState(false);
   const [leftMobileOpen, setLeftMobileOpen] = useState(false);
   const [rightMobileOpen, setRightMobileOpen] = useState(false);
   const [leftCollapsed, setLeftCollapsed] = useState(() => {
@@ -101,10 +104,30 @@ export default function Dashboard({ mode, setMode }) {
                 }
                 sx={{ mr: 1 }}
               >
-                <ViewSidebarOutlinedIcon
-                  fontSize="small"
-                  sx={{ transform: "scaleX(-1)" }}
-                />
+                {/* <ViewSidebarOutlinedIcon
+                  fontSize="medium"
+                  sx={{
+                    transform: "scaleX(-1)",
+                    color: (theme) => theme.palette.info.main,
+                    bgcolor: (theme) => theme.palette.tilelight.main,
+                    border: "2px solid grey",
+                    borderRadius: "10px",
+                    p: "2px", // shorthand for padding
+                  }}
+                /> */}
+                        <ViewSidebarOutlinedIcon
+        fontSize="medium"
+        onClick={() => setlOpen((prev) => !prev)}
+        sx={{
+          transform: lopen ? "scaleX(-1)" : "scaleX(1)",
+          transition: "transform 0.3s ease-in-out", // smooth flip
+          color: (theme) => theme.palette.info.main,
+          bgcolor: (theme) => theme.palette.tilelight.main,
+          border: "2px solid grey",
+          borderRadius: "10px",
+          p: "2px",
+        }}
+      />
               </IconButton>
               <StarOutlineIcon fontSize="small" sx={{ mr: 1 }} />
               {!isMobile && !isTab && (
@@ -182,10 +205,31 @@ export default function Dashboard({ mode, setMode }) {
                 }
                 sx={{ ml: 2 }}
               >
+                {/* <ViewSidebarOutlinedIcon
+                  onClick={() => setOpen((prev) => !prev)}
+                  fontSize="medium"
+                  sx={{
+                    transform: "scaleX(-1)",
+                    color: (theme) => theme.palette.info.main,
+                    bgcolor: (theme) => theme.palette.tilelight.main,
+                    border: "2px solid grey",
+                    borderRadius: "10px",
+                    p: "2px", // shorthand for padding
+                  }}
+                /> */}
                 <ViewSidebarOutlinedIcon
-                  fontSize="small"
-                  sx={{ transform: "scaleX(-1)" }}
-                />
+        fontSize="medium"
+        onClick={() => setrOpen((prev) => !prev)}
+        sx={{
+          transform: ropen ? "scaleX(-1)" : "scaleX(1)",
+          transition: "transform 0.3s ease-in-out", // smooth flip
+          color: (theme) => theme.palette.info.main,
+          bgcolor: (theme) => theme.palette.tilelight.main,
+          border: "2px solid grey",
+          borderRadius: "10px",
+          p: "2px",
+        }}
+      />
               </IconButton>
             </Toolbar>
           </AppBar>

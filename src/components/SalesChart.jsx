@@ -1,5 +1,6 @@
 import { Box, useTheme, Typography } from "@mui/material";
 import { PieChart, pieArcLabelClasses } from "@mui/x-charts/PieChart";
+import { useState, useEffect, useRef } from "react";
 const salesData = [
   { text: "Direct", value: 300.56, color: "#1C1C1C" },
   { text: "Affiliate", value: 135.18, color: "#BAEDBD" },
@@ -8,6 +9,8 @@ const salesData = [
 ];
 export function SalesChart() {
   const theme = useTheme();
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const chartRef = useRef(null);
   const processedData = salesData.map((item) => ({
     ...item,
     color:
@@ -15,8 +18,31 @@ export function SalesChart() {
         ? "#C6C7F8"
         : theme.palette[item.color]?.main || item.color,
   }));
+  useEffect(() => {
+    const currentChart = chartRef.current;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated) {
+            setHasAnimated(true);
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    if (currentChart) {
+      observer.observe(currentChart);
+    }
+    return () => {
+      if (currentChart) {
+        observer.unobserve(currentChart);
+      }
+    };
+  }, [hasAnimated]);
   return (
     <Box
+      ref={chartRef}
       sx={{
         background:
           theme.palette.mode === "dark"
@@ -58,6 +84,10 @@ export function SalesChart() {
                 data: processedData,
                 arcLabel: null,
                 highlightScope: { faded: "global", highlighted: "item" },
+                startAngle: hasAnimated ? 0 : 90,
+                endAngle: hasAnimated ? 360 : 90,
+                animationDuration: 5000,
+                animationEasing: "ease-out",
               },
             ]}
             legend={false}

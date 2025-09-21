@@ -62,6 +62,16 @@ const getTheme = (mode = "light") =>
         default: mode === "light" ? "#f9f9f9" : "#121212",
         paper: mode === "light" ? "#ffffff" : "#797878ff",
       },
+      lightScrollbar: {
+        track: "transparent",
+        thumb: "#888",
+        thumbHover: "#555",
+      },
+      darkScrollbar: {
+        track: "transparent",
+        thumb: "#aaa",
+        thumbHover: "#777",
+      },
     },
     typography: {
       fontFamily: "'Roboto', sans-serif",
@@ -124,6 +134,40 @@ const getTheme = (mode = "light") =>
             boxShadow: "none",
           },
         },
+      },
+      MuiCssBaseline: {
+        styleOverrides: (theme) => ({
+          "@media (max-width:600px)": {
+            "*::-webkit-scrollbar": {
+              display: "none",
+            },
+            "*": {
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            },
+          },
+          "*::-webkit-scrollbar": {
+            width: "6px",
+            height: "6px",
+          },
+          "*::-webkit-scrollbar-track": {
+            background: "transparent",
+          },
+          "*::-webkit-scrollbar-thumb": {
+            backgroundColor: theme.palette.mode === "dark" ? "#aaa" : "#888",
+            borderRadius: "6px",
+          },
+          "*::-webkit-scrollbar-thumb:hover": {
+            backgroundColor: theme.palette.mode === "dark" ? "#777" : "#555",
+          },
+          "*": {
+            scrollbarWidth: "thin",
+            scrollbarColor:
+              theme.palette.mode === "dark"
+                ? "#aaa transparent"
+                : "#888 transparent",
+          },
+        }),
       },
     },
   });
