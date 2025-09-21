@@ -305,7 +305,7 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
                         : theme.palette.black.main,
                     bgcolor:
                       theme.palette.mode === "dark"
-                        ? theme.palette.common.white
+                        ? theme.palette.blacklight.main
                         : theme.palette.tilelight.main,
                   },
                 }}
@@ -324,7 +324,7 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
                         : theme.palette.black.main,
                     bgcolor:
                       theme.palette.mode === "dark"
-                        ? theme.palette.common.white
+                        ? theme.palette.blacklight.main
                         : theme.palette.tilelight.main,
                   },
                 }}
