@@ -150,6 +150,8 @@ export default function OrdersTable() {
   const isSmDown = useMediaQuery(theme.breakpoints.down("sm"));
   const [selected, setSelected] = useState([]);
   const [search, setSearch] = useState("");
+  const muiTheme = useTheme();
+  const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"));
   const handleSelect = (orderId) => {
     setSelected((prev) =>
       prev.includes(orderId)
@@ -197,14 +199,30 @@ export default function OrdersTable() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           sx={{
-            minWidth: isSmDown ? 120 : 200,
-            bgcolor: theme.palette.background.default,
-            borderRadius: 1,
+            mr: 2,
+            width: isMobile ? 120 : 250,
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.08)"
+                : "#1C1C1C0D",
+            borderRadius: "25px",
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "25px",
+              "& fieldset": {
+                border: "none",
+              },
+              "&:hover fieldset": {
+                border: "none",
+              },
+              "&.Mui-focused fieldset": {
+                border: "none",
+              },
+            },
           }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon fontSize="small" />
+                <SearchIcon />
               </InputAdornment>
             ),
           }}
