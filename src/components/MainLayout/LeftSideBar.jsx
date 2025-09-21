@@ -260,7 +260,10 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
             }}
             fontWeight={600}
             color={theme.palette.text.primary}
-            onClick={() => navigate("/")}
+            onClick={() => {
+              navigate("/");
+              if (isMobile) onClose();
+            }}
           >
             Arya Bhupathi
           </Typography>
@@ -299,7 +302,11 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
                     color:
                       theme.palette.mode === "dark"
                         ? theme.palette.common.white
-                        : theme.palette.common.black,
+                        : theme.palette.black.main,
+                    bgcolor:
+                      theme.palette.mode === "dark"
+                        ? theme.palette.common.white
+                        : theme.palette.tilelight.main,
                   },
                 }}
               />
@@ -314,7 +321,11 @@ export default function LeftSidebar({ collapsed, isMobile, open, onClose }) {
                     color:
                       theme.palette.mode === "dark"
                         ? theme.palette.common.white
-                        : theme.palette.common.black,
+                        : theme.palette.black.main,
+                    bgcolor:
+                      theme.palette.mode === "dark"
+                        ? theme.palette.common.white
+                        : theme.palette.tilelight.main,
                   },
                 }}
               />

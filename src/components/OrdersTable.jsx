@@ -245,6 +245,19 @@ export default function OrdersTable() {
                       initialRows.length > 0 &&
                       selected.length === initialRows.length
                     }
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setSelected(initialRows.map((row) => row.orderId));
+                      } else {
+                        setSelected([]);
+                      }
+                    }}
+                    sx={{
+                      color: theme.palette.grey[400],
+                      "&.Mui-checked": {
+                        color: theme.palette.black.main,
+                      },
+                    }}
                   />
                 </TableCell>
                 {[
@@ -283,11 +296,15 @@ export default function OrdersTable() {
                     >
                       <TableCell padding="checkbox">
                         <Checkbox
-                          size="small"
-                          className="row-checkbox"
                           checked={isItemSelected}
-                          sx={{ visibility: "hidden" }}
                           onChange={() => handleSelect(row.orderId)}
+                          size="small"
+                          sx={{
+                            color: theme.palette.grey[400],
+                            "&.Mui-checked": {
+                              color: theme.palette.black.main,
+                            },
+                          }}
                         />
                       </TableCell>
                       <TableCell
@@ -388,11 +405,6 @@ export default function OrdersTable() {
                       alignItems="center"
                     >
                       <Box display="flex" alignItems="center" gap={1}>
-                        <Checkbox
-                          checked={isItemSelected}
-                          onChange={() => handleSelect(row.orderId)}
-                          size="small"
-                        />
                         <Avatar
                           src={row.user.avatar}
                           alt={row.user.name}
@@ -402,8 +414,19 @@ export default function OrdersTable() {
                           {row.user.name}
                         </Typography>
                       </Box>
+                      <Checkbox
+                        checked={isItemSelected}
+                        onChange={() => handleSelect(row.orderId)}
+                        size="small"
+                        sx={{
+                          color: theme.palette.grey[400],
+                          "&.Mui-checked": {
+                            color: theme.palette.black.main,
+                          },
+                        }}
+                      />
                     </Box>
-                    <Box mt={1}>
+                    <Box mt={1} p={1}>
                       <Typography variant="body2">
                         Order: {row.orderId}
                       </Typography>
@@ -413,8 +436,15 @@ export default function OrdersTable() {
                       <Typography variant="body2">
                         Address: {row.address}
                       </Typography>
-                      <Typography variant="body2">
-                        <CalendarTodayOutlinedIcon fontSize="small" />{" "}
+                      <Typography
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 0.5,
+                          fontSize: theme.typography.body2.fontSize,
+                        }}
+                      >
+                        <CalendarTodayOutlinedIcon fontSize="small" />
                         {row.date}
                       </Typography>
                       <Chip

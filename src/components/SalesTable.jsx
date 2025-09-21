@@ -85,7 +85,7 @@ export default function SalesTable() {
                     variant="body2"
                     sx={{ color: theme.palette.text.secondary }}
                   >
-                    Price: {row.price}
+                    Price - {row.price}
                   </Typography>
                 </Tooltip>
                 <Tooltip title={row.quantity}>
@@ -93,7 +93,7 @@ export default function SalesTable() {
                     variant="body2"
                     sx={{ color: theme.palette.text.secondary }}
                   >
-                    Quantity: {row.quantity}
+                    Quantity - {row.quantity}
                   </Typography>
                 </Tooltip>
                 <Tooltip title={row.amount}>
@@ -101,7 +101,7 @@ export default function SalesTable() {
                     variant="body2"
                     sx={{ color: theme.palette.text.secondary }}
                   >
-                    Amount: {row.amount}
+                    Amount - {row.amount}
                   </Typography>
                 </Tooltip>
               </CardContent>
