@@ -421,7 +421,10 @@ export default function OrdersTable() {
                         sx={{
                           color: theme.palette.grey[400],
                           "&.Mui-checked": {
-                            color: theme.palette.black.main,
+                            color: 
+                      theme.palette.mode === "dark"
+                        ? theme.palette.primary.main
+                        : theme.palette.black.main,
                           },
                         }}
                       />
